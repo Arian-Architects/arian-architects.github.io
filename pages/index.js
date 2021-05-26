@@ -44,7 +44,7 @@ const Home = () => {
             decoding="async"
             loading="lazy"
             className="fit-cover shadow-lg absolute w-[75vw] md:w-[50vw] h-[150px] sm:h-[300px] md:h-[500px]"
-            src="https://cdn.jsdelivr.net/gh/Arian-Architects/arian-architects.github.io/Rakesh%20Kohli,%20Inderpuri/1.jpg"
+            src="https://cdn.statically.io/gh/Arian-Architects/arian-architects.github.io/gh-pages/Rakesh%20Kohli,%20Inderpuri/1.jpg"
           />
           <div className="bg-gray-300 w-[75vw] md:w-[50vw] h-[150px] sm:h-[300px] md:h-[500px]"></div>
         </div>

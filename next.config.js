@@ -2,7 +2,7 @@ const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
   assetPrefix: isProd
-    ? 'https://cdn.jsdelivr.net/gh/Arian-Architects/arian-architects.github.io/'
+    ? 'https://cdn.statically.io/gh/Arian-Architects/arian-architects.github.io/gh-pages/'
     : '',
   future: {
     webpack5: true,

@@ -55,7 +55,7 @@ const IndividualProj = ({ slug }) => {
                     className="shadow absolute w-[300px] h-[250px] object-cover"
                     src={`${
                       process.env.NODE_ENV === 'production'
-                        ? 'https://cdn.jsdelivr.net/gh/Arian-Architects/arian-architects.github.io/'
+                        ? 'https://cdn.statically.io/gh/Arian-Architects/arian-architects.github.io/gh-pages/'
                         : '/'
                     }${slug}/${index + 1}.jpg`}
                   />
