@@ -1,5 +1,6 @@
 import SEO from '@/components/seo-head'
 import Button from '@/components/button'
+import { deploymentUrl } from '@/lib/data'
 import { getAllSnippets } from '@/lib/markdown'
 import { scrollProjects } from '@/components/scroll'
 
@@ -36,7 +37,7 @@ const Blog = ({ posts }) => {
                   <img
                     loading="lazy"
                     decoding="async"
-                    src={item.image}
+                    src={`${deploymentUrl}/${item.image}`}
                     className="rounded object-cover h-[250px] w-[250px] absolute top-0 left-0"
                   />
                 </div>

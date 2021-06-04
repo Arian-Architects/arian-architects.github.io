@@ -54,17 +54,17 @@ const MyApp = ({ Component, pageProps }) => {
                 socialLinks.map((item, index) => (
                   <a
                     key={index}
-                    aria-label={`${item.name} Arian Architects`}
-                    className={item.class}
                     target="_blank"
-                    rel="noopener noreferrer"
                     href={item.href}
+                    className={item.class}
+                    rel="noopener noreferrer"
+                    aria-label={`${item.name} Arian Architects`}
                   >
                     <img
-                      decoding="async"
                       width="30px"
                       height="30px"
-                      src={item.src}
+                      decoding="async"
+                      src={`${deploymentUrl}/${item.src}`}
                       alt={`${item.name} Arian Architects`}
                     />
                   </a>
