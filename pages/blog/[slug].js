@@ -108,6 +108,7 @@ export async function getStaticProps({ params }) {
     'image',
     'slug',
     'content',
+    'excerpt',
     'date',
   ])
   return {
