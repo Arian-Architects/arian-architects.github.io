@@ -21,13 +21,20 @@ const MyApp = ({ Component, pageProps }) => {
                     className="absolute left-1 top-[0.5] w-[22px] h-[22px]"
                   />
                   <div className="w-[25px] h-[25px]"></div>
-                  <span className="text-xl text-black">Arian Architects</span>
+                  <span className="text-md md:text-xl text-black">
+                    Arian Architects
+                  </span>
                 </div>
               </a>
             </Link>
-            <Link href="/projects">
-              <a className="text-lg text-black">Projects</a>
-            </Link>
+            <span className="flex flex-row space-x-3">
+              <Link href="/projects">
+                <a className="text-md md:text-lg text-black">Projects</a>
+              </Link>
+              <Link href="/blogs">
+                <a className="text-md md:text-lg text-black">Blogs</a>
+              </Link>
+            </span>
           </div>
         </div>
         <Component {...pageProps} />
