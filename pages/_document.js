@@ -25,6 +25,10 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap"
           />
+          <meta
+            name="google-site-verification"
+            content="HSLocEdYU3dxa4-PfF8gqBdYdjYVRT-Sv4gKLc8RzF4"
+          />
           <noscript>
             <link
               rel="stylesheet"
