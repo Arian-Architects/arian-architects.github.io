@@ -1,13 +1,11 @@
+import '@/styles/global.css'
 import Link from 'next/link'
 import 'tailwindcss/tailwind.css'
-import '@/styles/global.css'
-import SEO from '@/components/seo-head'
 import { deploymentUrl, socialLinks } from '@/lib/data'
 
 const MyApp = ({ Component, pageProps }) => {
   return (
     <>
-      <SEO />
       <div className="font-display flex flex-col">
         <div className="border-b bg-opacity-75 py-2 w-full bg-white flex flex-col items-center">
           <div className="flex flex-row items-center justify-between w-full px-4 md:px-32">

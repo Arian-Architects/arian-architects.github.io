@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import Button from '@/components/button'
 import ReactMarkdown from 'react-markdown'
 import { scrollProjects } from '@/components/scroll'
-import { deploymentUrl, month, weekday } from '@/lib/data'
 import { getAllSnippets, getPageContentBySlug } from '@/lib/markdown'
+import { deploymentUrl, month, productionUrl, weekday } from '@/lib/data'
 
 const Snippet = ({ page }) => {
   const router = new useRouter()
@@ -18,6 +18,7 @@ const Snippet = ({ page }) => {
         title={page.title}
         description={page.excerpt}
         image={`${deploymentUrl}/${page.image}`}
+        cannonical={`${productionUrl}/blog/${page.slug}`}
       />
       <div className="pt-8 flex flex-col items-center text-center">
         <div className="flex flex-col items-center w-[75vw] space-y-8">

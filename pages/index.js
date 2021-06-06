@@ -1,8 +1,11 @@
+import SEO from '@/components/seo-head'
 import Button from '@/components/button'
+import { productionUrl } from '@/lib/data'
 
 const Home = () => {
   return (
     <>
+      <SEO cannonical={`${productionUrl}`} />
       <div className="pt-8 flex flex-col items-center text-center space-y-8">
         <h1 className="text-4xl sm:text-6xl text-black">Arian Architects</h1>
         <h2 className="text-4xl sm:text-6xl text-gray-500">

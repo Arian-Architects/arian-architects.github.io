@@ -1,13 +1,13 @@
 import SEO from '@/components/seo-head'
 import Button from '@/components/button'
-import { deploymentUrl } from '@/lib/data'
 import { getAllSnippets } from '@/lib/markdown'
 import { scrollProjects } from '@/components/scroll'
+import { deploymentUrl, productionUrl } from '@/lib/data'
 
 const Blog = ({ posts }) => {
   return (
     <>
-      <SEO slug={'blogs'} title={'Blogs - Arian Architects'} />
+      <SEO cannonical={`${productionUrl}/blogs`} slug={'blogs'} title={'Blogs - Arian Architects'} />
       <div className="pt-8 flex flex-col items-center text-center space-y-8">
         <h1 className="text-4xl sm:text-6xl text-black">Blogs</h1>
         <svg

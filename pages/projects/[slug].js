@@ -1,6 +1,6 @@
-import { items } from '@/lib/data'
 import { useRouter } from 'next/router'
 import SEO from '@/components/seo-head'
+import { items, productionUrl } from '@/lib/data'
 import { scrollProjects } from '@/components/scroll'
 
 const IndividualProj = ({ slug }) => {
@@ -15,7 +15,11 @@ const IndividualProj = ({ slug }) => {
     <>
       {slug && (
         <>
-          <SEO slug={slug} title={`${slug} - Arian Architects`} />
+          <SEO
+            slug={slug}
+            title={`${slug} - Arian Architects`}
+            cannonical={`${productionUrl}/projects/${slug}`}
+          />
           <div className="pt-8 flex flex-col items-center text-center space-y-8">
             <h1 className="text-4xl sm:text-6xl text-black">
               {slug.split(',')[0]}
