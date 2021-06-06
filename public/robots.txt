@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://arian-architects.github.io/sitemap.xml
