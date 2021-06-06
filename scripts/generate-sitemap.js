@@ -67,7 +67,9 @@ const items = [
   ])
 
   items.map((item) => {
-    let temp = `/projects/${item.project}`.replace(/ /g, '%20')
+    let temp = `/projects/${item.project}`
+      .replace(/ /g, '%20')
+      .replace('&', '&amp;')
     pages.push(temp)
   })
 
