@@ -1,23 +1,14 @@
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
 import SEO from '@/components/seo-head'
+import { useRouter } from 'next/router'
 import Button from '@/components/button'
 import ReactMarkdown from 'react-markdown'
+import { DiscussionEmbed } from 'disqus-react'
 import { scrollProjects } from '@/components/scroll'
 import { deploymentUrl, month, weekday } from '@/lib/data'
 import { getAllSnippets, getPageContentBySlug } from '@/lib/markdown'
 
 const Snippet = ({ page }) => {
   const router = new useRouter()
-
-  useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'https://arian-architects.disqus.com/embed.js'
-    script.setAttribute('data-timestamp', +new Date())
-    script.async = true
-    script.defer = true
-    document.body.appendChild(script)
-  }, [])
 
   return router.isFallback || !page ? (
     <div>Loading...</div>
@@ -93,7 +84,15 @@ const Snippet = ({ page }) => {
             </article>
           </div>
           <div className="w-full flex flex-col justify-center min-h-[750px] md:min-h-[620px]">
-            <div className="w-full" id="disqus_thread"></div>
+            <DiscussionEmbed
+              shortname="arian-architects"
+              config={{
+                url: `https://arian-architects.github.io/blog/${page.slug}`,
+                identifier: page.slug,
+                title: page.title,
+                language: 'en',
+              }}
+            />
           </div>
         </div>
         <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
