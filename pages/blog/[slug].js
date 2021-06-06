@@ -92,7 +92,7 @@ const Snippet = ({ page }) => {
               <ReactMarkdown children={page.content} />
             </article>
           </div>
-          <div className="w-full flex flex-col justify-center min-h-[600px]">
+          <div className="w-full flex flex-col justify-center min-h-[750px] md:min-h-[620px]">
             <div className="w-full" id="disqus_thread"></div>
           </div>
         </div>
