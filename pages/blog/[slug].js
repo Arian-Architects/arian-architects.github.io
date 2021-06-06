@@ -2,7 +2,6 @@ import SEO from '@/components/seo-head'
 import { useRouter } from 'next/router'
 import Button from '@/components/button'
 import ReactMarkdown from 'react-markdown'
-import { DiscussionEmbed } from 'disqus-react'
 import { scrollProjects } from '@/components/scroll'
 import { deploymentUrl, month, weekday } from '@/lib/data'
 import { getAllSnippets, getPageContentBySlug } from '@/lib/markdown'
@@ -82,17 +81,6 @@ const Snippet = ({ page }) => {
             <article className="prose lg:prose-xl max-w-none">
               <ReactMarkdown children={page.content} />
             </article>
-          </div>
-          <div className="w-full flex flex-col justify-center min-h-[750px] md:min-h-[620px]">
-            <DiscussionEmbed
-              shortname="arian-architects"
-              config={{
-                url: `https://arian-architects.github.io/blog/${page.slug}`,
-                identifier: page.slug,
-                title: page.title,
-                language: 'en',
-              }}
-            />
           </div>
         </div>
         <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
