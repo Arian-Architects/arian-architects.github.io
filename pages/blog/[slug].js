@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import SEO from '@/components/seo-head'
 import Button from '@/components/button'
@@ -8,6 +9,16 @@ import { getAllSnippets, getPageContentBySlug } from '@/lib/markdown'
 
 const Snippet = ({ page }) => {
   const router = new useRouter()
+
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://arian-architects.disqus.com/embed.js'
+    script.setAttribute('data-timestamp', +new Date())
+    script.async = true
+    script.defer = true
+    document.body.appendChild(script)
+  }, [])
+
   return router.isFallback || !page ? (
     <div>Loading...</div>
   ) : (
@@ -80,6 +91,9 @@ const Snippet = ({ page }) => {
             <article className="prose lg:prose-xl max-w-none">
               <ReactMarkdown children={page.content} />
             </article>
+          </div>
+          <div className="w-full flex flex-col justify-center min-h-[600px]">
+            <div className="w-full" id="disqus_thread"></div>
           </div>
         </div>
         <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
