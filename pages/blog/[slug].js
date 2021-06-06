@@ -22,19 +22,23 @@ const Snippet = ({ page }) => {
       />
       <div className="pt-8 flex flex-col items-center text-center">
         <div className="flex flex-col items-center w-[75vw] space-y-8">
-          <h1 className="text-4xl sm:text-6xl text-black">{page.title}</h1>
+          <h1 className="leading-[3rem] text-4xl sm:text-5xl text-black">
+            {page.title}
+          </h1>
           <span className="text-gray-700 text-md">{`${
             weekday[new Date(page.date).getDay()]
           }, ${month[new Date(page.date).getMonth()]} ${new Date(
             page.date
           ).getDate()} ${new Date(page.date).getFullYear()}`}</span>
           <span className="flex flex-row items-center space-x-5">
-            <div className="relative w-[25px] h-[25px] border bg-gray-200 rounded-full">
+            <div className="relative w-[30px] h-[30px] border bg-gray-200 rounded-full">
               <img
                 loading="lazy"
                 decoding="async"
+                alt="Ishant Jain Twitter Image"
+                title="Ishant Jain Twitter Image"
                 src={`${deploymentUrl}/ishant-jain.jpg`}
-                className="absolute top-0 left-0 rounded-full"
+                className="absolute w-[30px] h-[30px] top-0 left-0 rounded-full"
               />
             </div>
             <span className="flex flex-col items-center space-y-0">
@@ -42,7 +46,7 @@ const Snippet = ({ page }) => {
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500"
+                className="m-0 p-0 text-blue-500"
                 href="https://twitter.com/ijainishant"
               >
                 @ijainishant
@@ -71,11 +75,13 @@ const Snippet = ({ page }) => {
       <div className="flex flex-col items-center w-full">
         <div className="pb-10 flex flex-col items-start w-[75vw]">
           <div className="w-full flex flex-col items-start space-y-8">
-            <div className="relative bg-gray-200 w-full h-[250px]">
+            <div className="relative bg-gray-200 w-[75vw] h-[250px]">
               <img
                 loading="lazy"
                 decoding="async"
-                className="rounded object-cover absolute top-0 left-0 w-full h-[250px]"
+                alt="Blog Cover Image"
+                title="Blog Cover Image"
+                className="rounded object-cover absolute top-0 left-0 w-[75vw] h-[250px]"
                 src={`${deploymentUrl}/${page.image}`}
               />
             </div>

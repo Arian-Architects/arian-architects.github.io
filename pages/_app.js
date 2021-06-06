@@ -25,7 +25,7 @@ const MyApp = ({ Component, pageProps }) => {
                 </div>
               </a>
             </Link>
-            <span className="flex flex-row space-x-3">
+            <span className="flex flex-row space-x-5">
               <Link href="/projects">
                 <a className="text-md md:text-lg text-black">Projects</a>
               </Link>
