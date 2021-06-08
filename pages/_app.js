@@ -1,9 +1,20 @@
 import '@/styles/global.css'
 import Link from 'next/link'
+import { useEffect } from 'react'
 import 'tailwindcss/tailwind.css'
+import { Metrics } from '@layer0/rum'
 import { deploymentUrl, socialLinks } from '@/lib/data'
 
 const MyApp = ({ Component, pageProps }) => {
+  useEffect(() => {
+    // Measure only on production
+    if (process.env.NODE_ENV == 'production') {
+      new Metrics({
+        token: 'da89674b-c131-4fd9-9795-75c60377525b',
+      }).collect()
+    }
+  }, [])
+
   return (
     <>
       <div className="font-display flex flex-col">
