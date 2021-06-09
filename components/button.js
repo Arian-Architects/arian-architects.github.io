@@ -1,6 +1,13 @@
 import Link from 'next/link'
 
-const Button = ({ link = false, href, text, mode = true, w = 'w-[150px]' }) => {
+const Button = ({
+  link = false,
+  href,
+  text,
+  mode = true,
+  w = 'w-[150px]',
+  onClick = undefined,
+}) => {
   const buttonClass = [
     mode
       ? 'bg-black hover:bg-white text-white hover:text-black hover:shadow-2xl'
@@ -14,6 +21,10 @@ const Button = ({ link = false, href, text, mode = true, w = 'w-[150px]' }) => {
     <Link href={href}>
       <a className={buttonClass}>{text}</a>
     </Link>
+  ) : onClick ? (
+    <button className={buttonClass} onClick={onClick}>
+      {text}
+    </button>
   ) : (
     <a href={href} className={buttonClass}>
       {text}

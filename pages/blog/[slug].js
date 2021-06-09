@@ -1,13 +1,72 @@
+import { useState } from 'react'
 import SEO from '@/components/seo-head'
 import { useRouter } from 'next/router'
 import Button from '@/components/button'
 import ReactMarkdown from 'react-markdown'
+import firebase, { firestore } from '@/lib/firebase'
 import { scrollProjects } from '@/components/scroll'
 import { getAllSnippets, getPageContentBySlug } from '@/lib/markdown'
 import { deploymentUrl, month, productionUrl, weekday } from '@/lib/data'
 
 const Snippet = ({ page }) => {
   const router = new useRouter()
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [content, setContent] = useState('')
+  const [comments, setComments] = useState([])
+
+  const validateEmail = (email) => {
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return re.test(String(email).toLowerCase())
+  }
+
+  const writeComment = (e) => {
+    e.preventDefault()
+    if (
+      name.length > 3 &&
+      validateEmail(email) &&
+      content.length > 3 &&
+      content.length < 500
+    ) {
+      firestore
+        .collection('comments')
+        .add({
+          name: name,
+          slug: page.slug,
+          content: content,
+          time: firebase.firestore.Timestamp.fromDate(new Date()),
+        })
+        .then(() => {
+          setName('')
+          setEmail('')
+          setContent('')
+        })
+        .catch((err) => {
+          console.error('error adding comment: ', err)
+        })
+    } else {
+      console.log(name, content, email)
+    }
+  }
+
+  const getComments = () => {
+    firestore
+      .collection('comments')
+      .get()
+      .then((snapshot) => {
+        const posts = snapshot.docs
+          .map((doc) => doc.data())
+          .filter((doc) => doc.slug === page.slug)
+          .map((doc) => {
+            return { id: doc.id, ...doc }
+          })
+        setComments(posts)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
   return router.isFallback || !page ? (
     <div>Loading...</div>
@@ -89,6 +148,71 @@ const Snippet = ({ page }) => {
               <ReactMarkdown children={page.content} />
             </article>
           </div>
+        </div>
+        <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
+        <div className="pb-10 flex flex-col items-start w-[75vw]">
+          <form onSubmit={writeComment} className="pt-10 flex flex-col w-full">
+            <h1 className="font-semibold text-black text-lg">
+              Write a comment
+            </h1>
+            <div className="flex flex-row space-x-5 items-center">
+              <input
+                className="mt-5 w-1/2 appearance-none transition-colors outline-none ring-0 duration-500 px-5 py-2 border hover:border-black rounded hover:shadow text-black"
+                placeholder="Name"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+                required
+              />
+              <input
+                className="mt-5 w-1/2 appearance-none transition-colors outline-none ring-0 duration-500 px-5 py-2 border hover:border-black rounded hover:shadow text-black"
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                required
+              />
+            </div>
+            <textarea
+              className="mt-5 appearance-none transition-colors duration-500 outline-none ring-0 p-5 border hover:border-black rounded hover:shadow text-black"
+              placeholder="Maximum of 500 characters."
+              onChange={(e) => setContent(e.target.value)}
+              value={content}
+              required
+            />
+            <button
+              className="w-[250px] appearance-none mt-10 bg-white hover:bg-black text-black hover:text-white py-2 px-5 transition-colors duration-500 text-lg text-center border border-black"
+              type="submit"
+            >
+              Post a comment
+            </button>
+          </form>
+        </div>
+        <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
+        <div className="pt-10 pb-10 flex flex-col items-start w-[75vw]">
+          <h1 className="font-semibold text-black text-lg">Comments</h1>
+          {comments
+            .sort((a, b) =>
+              a.time.toDate().getTime() > b.time.toDate().getTime() ? -1 : 1
+            )
+            .map((item) => (
+              <div
+                key={item.time.seconds}
+                className="border rounded p-5 w-full mt-5 flex flex-col"
+              >
+                <span className="text-lg text-gray-500 font-medium">
+                  {item.name} &middot; {item.time.toDate().toDateString()}
+                </span>
+                <span className="mt-3 text-md text-gray-500 font-bold">
+                  {item.content}
+                </span>
+              </div>
+            ))}
+          <Button
+            link={false}
+            mode={false}
+            w="mt-10 w-[250px]"
+            onClick={getComments}
+            text={'Load  Comments'}
+          />
         </div>
         <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
         <div className="pb-10 flex flex-col items-start w-[75vw]">

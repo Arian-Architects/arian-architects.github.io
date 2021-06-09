@@ -13,6 +13,7 @@
   "dependencies": {
     "@layer0/rum": "^2.1.1",
     "@tailwindcss/typography": "^0.4.1",
+    "firebase": "^8.6.5",
     "gray-matter": "^4.0.3",
     "next": "^10.2.3",
     "preact": "^10.5.13",
