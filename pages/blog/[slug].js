@@ -138,15 +138,15 @@ const Snippet = ({ page }) => {
             <h1 className="font-semibold text-black text-lg">
               Write a comment
             </h1>
-            <div className="flex flex-row space-x-5 items-start">
+            <div className="flex flex-col sm:flex-row sm:space-x-5 items-start">
               <input
                 required
                 value={name}
                 placeholder="Name*"
                 onChange={(e) => setName(e.target.value)}
-                className="mt-5 w-1/2 appearance-none transition-colors outline-none ring-0 duration-500 px-5 py-2 border hover:border-black rounded hover:shadow text-black"
+                className="mt-5 w-full sm:w-1/2 appearance-none transition-colors outline-none ring-0 duration-500 px-5 py-2 border hover:border-black rounded hover:shadow text-black"
               />
-              <div className="mt-5 w-1/2 flex flex-col space-y-1">
+              <div className="mt-5 w-full sm:w-1/2 flex flex-col space-y-1">
                 <input
                   value={email}
                   placeholder="Email (Optional)"
