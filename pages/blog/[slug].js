@@ -60,7 +60,7 @@ const Snippet = ({ page }) => {
         cannonical={`${productionUrl}/blog/${page.slug}`}
       />
       <div className="pt-8 flex flex-col items-center text-center">
-        <div className="flex flex-col items-center w-[75vw] space-y-8">
+        <div className="flex flex-col items-center w-[90vw] sm:w-[75vw] lg:w-[50vw] space-y-8">
           <h1 className="leading-[3rem] text-4xl sm:text-5xl text-black">
             {page.title}
           </h1>
@@ -88,25 +88,25 @@ const Snippet = ({ page }) => {
         className="mt-10 mb-10 h-[1px] px-4 md:px-32 bg-gray-200 w-full"
       />
       <div className="flex flex-col items-center w-full">
-        <div className="pb-10 flex flex-col items-start w-[75vw]">
+        <div className="pb-10 flex flex-col items-start w-[90vw] sm:w-[75vw] lg:w-[50vw]">
           <div className="w-full flex flex-col items-start space-y-8">
-            <div className="relative bg-gray-200 w-[75vw] h-[250px]">
+            <div className="relative bg-gray-200 w-[90vw] sm:w-[75vw] lg:w-[50vw] h-[250px]">
               <img
                 loading="lazy"
                 decoding="async"
                 alt="Blog Cover Image"
                 title="Blog Cover Image"
-                className="rounded object-cover absolute top-0 left-0 w-[75vw] h-[250px]"
+                className="rounded object-cover absolute top-0 left-0 w-[90vw] sm:w-[75vw] lg:w-[50vw] h-[250px]"
                 src={`${deploymentUrl}/${page.image}`}
               />
             </div>
-            <article className="prose lg:prose-xl max-w-none">
+            <article className="prose max-w-none">
               <ReactMarkdown children={page.content} />
             </article>
           </div>
         </div>
-        <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
-        <div className="pb-10 flex flex-row items-center justify-between w-[75vw]">
+        <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[90vw] sm:w-[75vw] lg:w-[50vw]" />
+        <div className="pb-10 flex flex-row items-center justify-between w-[90vw] sm:w-[75vw] lg:w-[50vw]">
           <div
             title="Likes"
             onClick={() =>
@@ -132,8 +132,8 @@ const Snippet = ({ page }) => {
             url={`${productionUrl}/blog/${page.slug}`}
           />
         </div>
-        <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
-        <div className="pb-10 flex flex-col items-start w-[75vw]">
+        <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[90vw] sm:w-[75vw] lg:w-[50vw]" />
+        <div className="pb-10 flex flex-col items-start w-[90vw] sm:w-[75vw] lg:w-[50vw]">
           <form onSubmit={writeComment} className="pt-10 flex flex-col w-full">
             <h1 className="font-semibold text-black text-lg">
               Write a comment
@@ -173,8 +173,8 @@ const Snippet = ({ page }) => {
             </button>
           </form>
         </div>
-        <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
-        <div className="pt-10 pb-10 flex flex-col items-start w-[75vw]">
+        <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[90vw] sm:w-[75vw] lg:w-[50vw]" />
+        <div className="pt-10 pb-10 flex flex-col items-start w-[90vw] sm:w-[75vw] lg:w-[50vw]">
           <h1 className="font-semibold text-black text-lg">Comments</h1>
           {comments
             .sort((a, b) =>

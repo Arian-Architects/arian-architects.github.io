@@ -38,4 +38,5 @@ Apart from the technical qualifications required to be an architect, as stated a
 - An architect provides, quality check and guidance visits at the site/ workshop, ensuring the right techniques and procedure are being followed and if the drawings are being followed correctly.
 - An architect gets your plans sanctioned from govt. authority. Balancing the factors of state bye-laws, maximum usage vs. open spaces, achieving habitable space, functionality and aesthetics to the building and/or space.
 - An architect designs building services like plumbing, electricals, drainage systems, HVAC, active and passive cooling or heating, minimising maintenance, avoiding any snags or future damages to the building and environment, minimising or omitting any future mis-happening that could happen due to wrong or improper techniques of work or wrongly chosen material grade.
-- AN ARCHITECT IS A BRIDGE THAT CONNECTS USER’S THOUGHTS TO USER EXPERIENCE.
+
+### AN ARCHITECT IS A BRIDGE THAT CONNECTS USER’S THOUGHTS TO USER EXPERIENCE.
