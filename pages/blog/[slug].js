@@ -54,6 +54,16 @@ const Snippet = ({ page }) => {
   ) : (
     <>
       <SEO
+        sData={{
+          '@id': 'https://arian-architects.github.io/',
+          '@context': 'https://schema.org',
+          '@type': 'NewsArticle',
+          headline: page.title,
+          description: page.excerpt,
+          image: [`${deploymentUrl}/${page.image}`],
+          datePublished: new Date(2021, 6, 13),
+          dateModified: new Date(2021, 6, 13),
+        }}
         slug={page.slug}
         title={page.title}
         description={page.excerpt}

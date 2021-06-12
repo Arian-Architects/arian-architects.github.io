@@ -1,5 +1,10 @@
 import Head from 'next/head'
-import { defaultDescription, defaultTitle, deploymentUrl } from '@/lib/data'
+import {
+  defaultDescription,
+  defaultTitle,
+  deploymentUrl,
+  structuredData,
+} from '@/lib/data'
 
 const SEO = ({
   title,
@@ -10,6 +15,7 @@ const SEO = ({
   cannonical,
   author,
   faviconImage = `${deploymentUrl}/favicon-image.png`,
+  sData = {},
 }) => {
   const Title = `${title ?? defaultTitle}`.trim()
   const Description = `${description ?? defaultDescription}`.trim()
@@ -59,6 +65,14 @@ const SEO = ({
       )}
       {cannonical && <link rel="canonical" href={cannonical} />}
       {author && <meta name="author" content={author} />}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            Object.keys(sData).length > 0 ? sData : structuredData
+          ),
+        }}
+      />
     </Head>
   )
 }
