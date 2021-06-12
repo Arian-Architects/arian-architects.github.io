@@ -22,7 +22,7 @@ const SocialLinks = ({ className, url, altText }) => {
         className="cursor-pointer"
         title={`LinkedIn, ${altText} - Arian Architects`}
         aria-label={`LinkedIn, ${altText} - Arian Architects`}
-        href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}}`}
+        href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`}
       >
         <svg width="29" height="29">
           <path d="M5 6.36C5 5.61 5.63 5 6.4 5h16.2c.77 0 1.4.61 1.4 1.36v16.28c0 .75-.63 1.36-1.4 1.36H6.4c-.77 0-1.4-.6-1.4-1.36V6.36z"></path>
