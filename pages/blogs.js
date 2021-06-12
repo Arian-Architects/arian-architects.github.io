@@ -3,11 +3,16 @@ import Button from '@/components/button'
 import { getAllSnippets } from '@/lib/markdown'
 import { scrollProjects } from '@/components/scroll'
 import { deploymentUrl, productionUrl } from '@/lib/data'
+import RedefineLifestyle from '@/components/redefine-lifestyle'
 
 const Blog = ({ posts }) => {
   return (
     <>
-      <SEO cannonical={`${productionUrl}/blogs`} slug={'blogs'} title={'Blogs - Arian Architects'} />
+      <SEO
+        cannonical={`${productionUrl}/blogs`}
+        slug={'blogs'}
+        title={'Blogs - Arian Architects'}
+      />
       <div className="pt-8 flex flex-col items-center text-center space-y-8">
         <h1 className="text-4xl sm:text-6xl text-black">Blogs</h1>
         <svg
@@ -61,18 +66,7 @@ const Blog = ({ posts }) => {
         </div>
         <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
         <div className="pb-10 flex flex-col items-start w-[75vw]">
-          <div className="flex flex-col items-start mt-8 space-y-8">
-            <h2 className="text-4xl sm:text-6xl text-black">
-              Wanna redefine your lifestyle?
-            </h2>
-            <h2 className="text-4xl sm:text-6xl text-gray-500">Let’s talk!</h2>
-            <Button
-              href={'mailto:arianarchitects@gmail.com'}
-              link={false}
-              mode={false}
-              text={'Get in touch'}
-            />
-          </div>
+          <RedefineLifestyle />
         </div>
       </div>
     </>

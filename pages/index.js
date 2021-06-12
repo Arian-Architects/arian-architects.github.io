@@ -1,6 +1,7 @@
 import SEO from '@/components/seo-head'
 import Button from '@/components/button'
 import { productionUrl } from '@/lib/data'
+import RedefineLifestyle from '@/components/redefine-lifestyle'
 
 const Home = () => {
   return (
@@ -60,18 +61,7 @@ const Home = () => {
         />
         <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
         <div className="pb-10 flex flex-col items-start w-[75vw]">
-          <div className="flex flex-col items-start space-y-8">
-            <h2 className="text-4xl sm:text-6xl text-black">
-              Wanna redefine your lifestyle?
-            </h2>
-            <h2 className="text-4xl sm:text-6xl text-gray-500">Let’s talk!</h2>
-            <Button
-              href={'mailto:arianarchitects@gmail.com'}
-              link={false}
-              mode={false}
-              text={'Get in touch'}
-            />
-          </div>
+          <RedefineLifestyle />
         </div>
       </div>
     </>

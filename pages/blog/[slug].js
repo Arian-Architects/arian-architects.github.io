@@ -9,6 +9,7 @@ import SocialLinks from '@/components/social-links'
 import firebase, { firestore } from '@/lib/firebase'
 import { getComments } from '@/components/posts/comment'
 import { postLike, getLikes } from '@/components/posts/like'
+import RedefineLifestyle from '@/components/redefine-lifestyle'
 import { getAllSnippets, getPageContentBySlug } from '@/lib/markdown'
 import { deploymentUrl, month, productionUrl, weekday } from '@/lib/data'
 
@@ -202,18 +203,7 @@ const Snippet = ({ page }) => {
         </div>
         <div className="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]" />
         <div className="pb-10 flex flex-col items-start w-[75vw]">
-          <div className="flex flex-col items-start mt-8 space-y-8">
-            <h2 className="text-4xl sm:text-6xl text-black">
-              Wanna redefine your lifestyle?
-            </h2>
-            <h2 className="text-4xl sm:text-6xl text-gray-500">Let’s talk!</h2>
-            <Button
-              link={false}
-              mode={false}
-              text={'Get in touch'}
-              href={'mailto:arianarchitects@gmail.com'}
-            />
-          </div>
+          <RedefineLifestyle />
         </div>
       </div>
     </>
