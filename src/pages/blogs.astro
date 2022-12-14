@@ -1,0 +1,55 @@
+---
+import { getAllSnippets } from 'src/markdown'
+import Button from '@/components/Button.astro'
+import MainLayout from '@/layouts/MainLayout.astro'
+
+const posts = getAllSnippets(['slug', 'excerpt', 'title', 'date', 'image'])
+---
+
+<MainLayout valid="true" content={{ title: 'Blogs - Arian Architects' }}>
+  <div class="pt-8 flex flex-col items-center text-center space-y-8">
+    <h1 class="text-4xl sm:text-6xl text-black">Blogs</h1>
+    <a href="#blogs">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+        <path
+          fill-rule="evenodd"
+          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+      </svg>
+    </a>
+  </div>
+  <div id="blogs" class="mt-10 h-[1px] px-4 md:px-32 bg-gray-200 w-full"></div>
+  <div class="flex flex-col items-center w-full">
+    <div class="pt-10 pb-10 flex flex-col items-start w-[75vw]">
+      <div class="w-full flex flex-col items-start space-y-8">
+        {
+          posts &&
+            posts.map((item) => (
+              <div class="flex flex-col md:flex-row">
+                <div class="rounded relative w-full h-[250px] max-w-[250px] bg-gray-200">
+                  <img
+                    loading="lazy"
+                    decoding="async"
+                    src={`/blog/${item.image}`}
+                    class="rounded object-cover h-[250px] w-[250px] absolute top-0 left-0"
+                  />
+                </div>
+                <div class="py-10 md:py-0 md:px-10 flex flex-col space-y-5">
+                  <h1 class="text-xl sm:text-3xl font-semibold text-black">{item.title}</h1>
+                  <h3 class="text-md sm:text-xl text-black" set:text={item.excerpt} />
+                  <Button href={`/blog/${item.slug}`} link={true} mode={true} text={'Read More'} />
+                </div>
+              </div>
+            ))
+        }
+      </div>
+    </div>
+    <div class="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]"></div>
+    <div class="pb-10 flex flex-col items-start w-[75vw]">
+      <div class="flex flex-col items-start mt-8 space-y-8">
+        <h2 class="text-4xl sm:text-6xl text-black">Wanna redefine your lifestyle?</h2>
+        <h2 class="text-4xl sm:text-6xl text-gray-500">Let&apos;s talk!</h2>
+        <Button href={'mailto:arianarchitects@gmail.com'} link={false} mode={false} text={'Get in touch'} />
+      </div>
+    </div>
+  </div>
+</MainLayout>

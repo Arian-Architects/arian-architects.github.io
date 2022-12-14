@@ -1,0 +1,79 @@
+---
+import Header from '@/components/Header.astro'
+import Footer from '@/components/Footer.astro'
+import BaseHead from '@/components/BaseHead.astro'
+import { SITE_DESCRIPTION, SITE_TITLE } from '../config'
+
+const {
+  content: { title = SITE_TITLE, description = SITE_DESCRIPTION },
+  valid,
+} = Astro.props
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style is:global>
+      html {
+        scroll-behavior: smooth;
+      }
+      @font-face {
+        font-display: swap;
+        font-style: normal;
+        font-weight: 100 900;
+        font-family: 'Manrope';
+        src: url(/fonts/inter.woff2) format('woff2');
+      }
+    </style>
+  </head>
+  <body class="flex flex-col font-display">
+    <Header />
+    {valid && <slot />}
+    <Footer />
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        fetch('/version.json')
+          .then((res) => res.json())
+          .then((res) => {
+            if (res && res.version) {
+              localStorage.setItem('received-sw-version', res.version)
+              console.log('going to register.')
+              navigator.serviceWorker.register('/service-worker.js').then(
+                (registration) => {
+                  console.log('Service worker registration succeeded:', registration)
+                  const swVersion = localStorage.getItem('sw-version')
+                  if (swVersion) {
+                    if (swVersion !== res.version) {
+                      console.log('Update registeration')
+                      self.caches.delete('prefetch').then(() => {
+                        registration.update().then(() => {
+                          // Update the version if updated locally
+                          localStorage.setItem('sw-version', res.version)
+                        })
+                      })
+                    }
+                  } else {
+                    localStorage.setItem('sw-version', res.version)
+                  }
+                },
+                (error) => {
+                  console.error(`Service worker registration failed: ${error}`)
+                }
+              )
+            }
+          })
+      } else {
+        console.error('Service workers are not supported.')
+      }
+      const attrs = ['href', 'src', 'srcset', 'data-src']
+      attrs.forEach((j) => {
+        document.querySelectorAll(`[${j}^="/"]`).forEach((i) => {
+          let sc = document.createElement('link')
+          sc.setAttribute('rel', 'prefetch')
+          sc.setAttribute('href', i.getAttribute(j))
+          document.head.appendChild(sc)
+        })
+      })
+    </script>
+  </body>
+</html>

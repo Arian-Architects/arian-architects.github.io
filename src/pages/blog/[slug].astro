@@ -1,0 +1,58 @@
+---
+import markdownToHtml from 'src/operations'
+import Author from '@/components/Author.astro'
+import Button from '@/components/Button.astro'
+import MainLayout from '@/layouts/MainLayout.astro'
+import DateString from '@/components/DateString.astro'
+import SocialLinks from '@/components/SocialLinks.astro'
+import { getAllSnippets, getPageContentBySlug } from 'src/markdown'
+
+export function getStaticPaths() {
+  return getAllSnippets(['slug']).map(({ slug }) => ({ params: { slug } }))
+}
+
+const { slug } = Astro.params
+
+const page = getPageContentBySlug(slug, ['title', 'image', 'slug', 'content', 'excerpt', 'date'])
+---
+
+<MainLayout valid={true} content={{ title: page.title }}>
+  <div class="pt-8 flex flex-col items-center text-center">
+    <div class="flex flex-col items-center w-[90vw] sm:w-[75vw] lg:w-[50vw] space-y-8">
+      <h1 class="leading-[3rem] text-4xl sm:text-5xl text-black">
+        {page.title}
+      </h1>
+      <DateString class="text-gray-700 text-md" date={new Date(page.date)} />
+      <div class="w-full flex flex-col sm:flex-row items-center justify-between">
+        <Author name={'Ishant Jain'} twitter={'ijainishant'} image={'/blog/ishant-jain.jpg'} />
+        <SocialLinks className={'mt-8 sm:mt-0'} altText={page.title} url={`/blog/${page.slug}`} />
+      </div>
+    </div>
+  </div>
+  <div id="blog" class="mt-10 mb-10 h-[1px] px-4 md:px-32 bg-gray-200 w-full"></div>
+  <div class="flex flex-col items-center w-full">
+    <div class="pb-10 flex flex-col items-start w-[90vw] sm:w-[75vw] lg:w-[50vw]">
+      <div class="w-full flex flex-col items-start space-y-8">
+        <div class="relative bg-gray-200 w-[90vw] sm:w-[75vw] lg:w-[50vw] h-[250px]">
+          <img
+            loading="lazy"
+            decoding="async"
+            alt="Blog Cover Image"
+            title="Blog Cover Image"
+            src={`/blog/${page.image}`}
+            class="rounded object-cover absolute top-0 left-0 w-[90vw] sm:w-[75vw] lg:w-[50vw] h-[250px]"
+          />
+        </div>
+        <article set:html={markdownToHtml(page.content)} class="prose max-w-none" />
+      </div>
+    </div>
+    <div class="h-[1px] px-4 md:px-32 bg-gray-300 w-[75vw]"></div>
+    <div class="pb-10 flex flex-col items-start w-[75vw]">
+      <div class="flex flex-col items-start mt-8 space-y-8">
+        <h2 class="text-4xl sm:text-6xl text-black">Wanna redefine your lifestyle?</h2>
+        <h2 class="text-4xl sm:text-6xl text-gray-500">Let&apos;s talk!</h2>
+        <Button href={'mailto:arianarchitects@gmail.com'} link={false} mode={false} text={'Get in touch'} />
+      </div>
+    </div>
+  </div>
+</MainLayout>

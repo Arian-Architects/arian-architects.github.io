@@ -1,0 +1,38 @@
+---
+import { items } from 'src/config'
+import Button from '@/components/Button.astro'
+import MainLayout from '@/layouts/MainLayout.astro'
+---
+
+<MainLayout valid={items} content={{ title: 'Projects - Arian Architects' }}>
+  <div class="pt-8 flex flex-col items-center text-center space-y-8">
+    <h1 class="text-4xl sm:text-6xl text-black">Projects</h1>
+    <a href="#projects">
+      <svg width="32" height="32" fill="currentColor" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+        <path
+          fill-rule="evenodd"
+          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+      </svg>
+    </a>
+  </div>
+  <div id="projects" class="mt-10 h-[1px] px-4 md:px-32 bg-gray-200 w-full"></div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    {
+      items &&
+        items.map((item) => (
+          <div class="relative border border-gray-100 w-full text-center flex flex-col items-center py-10">
+            <div class="bg-gray-200 w-[300px] h-[250px]" />
+            <img
+              loading="lazy"
+              decoding="async"
+              src={`/${item.project}/1.jpg`}
+              class="shadow absolute w-[300px] h-[250px] object-cover"
+            />
+            <h1 class="w-[300px] mt-5 text-4xl text-black">{item.project.split(',')[0]}</h1>
+            <h2 class="w-[300px] mt-3 mb-8 text-3xl text-gray-500">{item.project.split(',')[1]}</h2>
+            <Button href={`/projects/${item.project}`} link={true} mode={false} w="mt-auto w-[250px]" text={'View Project'} />
+          </div>
+        ))
+    }
+  </div>
+</MainLayout>
