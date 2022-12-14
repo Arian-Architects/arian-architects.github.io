@@ -1,8 +1,7 @@
 ---
 const { href, className } = Astro.props
-const isActive = href === Astro.url.pathname
 ---
 
-<a href={href} class:list={[{ 'border-b': isActive }, className]}>
+<a href={href} class={className}>
   <slot />
 </a>

@@ -2,11 +2,10 @@
 import Header from '@/components/Header.astro'
 import Footer from '@/components/Footer.astro'
 import BaseHead from '@/components/BaseHead.astro'
-import { SITE_DESCRIPTION, SITE_TITLE } from '../config'
+import { SITE_DESCRIPTION, SITE_TITLE } from '../seo'
 
 const {
   content: { title = SITE_TITLE, description = SITE_DESCRIPTION },
-  valid,
 } = Astro.props
 ---
 
@@ -28,7 +27,7 @@ const {
   </head>
   <body class="flex flex-col font-display">
     <Header />
-    {valid && <slot />}
+    <slot />
     <Footer />
     <script is:inline>
       if ('serviceWorker' in navigator) {
@@ -65,13 +64,15 @@ const {
       } else {
         console.error('Service workers are not supported.')
       }
-      const attrs = ['href', 'src', 'srcset', 'data-src']
-      attrs.forEach((j) => {
-        document.querySelectorAll(`[${j}^="/"]`).forEach((i) => {
-          let sc = document.createElement('link')
-          sc.setAttribute('rel', 'prefetch')
-          sc.setAttribute('href', i.getAttribute(j))
-          document.head.appendChild(sc)
+      window.addEventListener('load', (event) => {
+        const attrs = ['href', 'src', 'srcset', 'data-src']
+        attrs.forEach((j) => {
+          document.querySelectorAll(`[${j}^="/"]`).forEach((i) => {
+            let sc = document.createElement('link')
+            sc.setAttribute('rel', 'prefetch')
+            sc.setAttribute('href', i.getAttribute(j))
+            document.head.appendChild(sc)
+          })
         })
       })
     </script>

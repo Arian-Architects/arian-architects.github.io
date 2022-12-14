@@ -1,5 +1,5 @@
 ---
-import { items } from 'src/config'
+import { items } from 'src/data'
 import MainLayout from '@/layouts/MainLayout.astro'
 
 export function getStaticPaths() {
@@ -13,7 +13,7 @@ const { slug } = Astro.params
 const specificProj = items.filter((item) => item.project == slug)[0]
 ---
 
-<MainLayout valid={items} content={{ title: 'Projects - Arian Architects' }}>
+<MainLayout content={{ title: 'Projects - Arian Architects' }}>
   <div class="pt-8 flex flex-col items-center text-center space-y-8">
     <h1 class="text-4xl sm:text-6xl text-black">{slug.split(',')[0]}</h1>
     <h2 class="text-4xl sm:text-6xl text-gray-500">{slug.split(',')[1]}</h2>

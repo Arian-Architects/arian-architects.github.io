@@ -1,6 +1,11 @@
 import fs from 'fs'
 import { join } from 'path'
 import matter from 'gray-matter'
+import prism from 'remark-prism'
+import { unified } from 'unified'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify'
 
 // Directory of snippets
 const pagesDirectory = join(process.cwd(), 'blogs')
@@ -46,4 +51,9 @@ export function getAllSnippets(fields = []) {
   const slugs = getSlugsFromDirectory(pagesDirectory)
   const pages = slugs.map((slug) => getPageContentBySlug(slug, fields))
   return pages
+}
+
+export async function markdownToHtml(markdown) {
+  const result = await unified().use(remarkParse).use(prism).use(remarkRehype).use(rehypeStringify).process(markdown)
+  return result.toString()
 }

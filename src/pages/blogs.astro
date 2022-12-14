@@ -6,7 +6,7 @@ import MainLayout from '@/layouts/MainLayout.astro'
 const posts = getAllSnippets(['slug', 'excerpt', 'title', 'date', 'image'])
 ---
 
-<MainLayout valid="true" content={{ title: 'Blogs - Arian Architects' }}>
+<MainLayout content={{ title: 'Blogs - Arian Architects' }}>
   <div class="pt-8 flex flex-col items-center text-center space-y-8">
     <h1 class="text-4xl sm:text-6xl text-black">Blogs</h1>
     <a href="#blogs">

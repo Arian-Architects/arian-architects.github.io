@@ -1,11 +1,10 @@
 ---
-import markdownToHtml from 'src/operations'
 import Author from '@/components/Author.astro'
 import Button from '@/components/Button.astro'
 import MainLayout from '@/layouts/MainLayout.astro'
 import DateString from '@/components/DateString.astro'
 import SocialLinks from '@/components/SocialLinks.astro'
-import { getAllSnippets, getPageContentBySlug } from 'src/markdown'
+import { getAllSnippets, getPageContentBySlug, markdownToHtml } from 'src/markdown'
 
 export function getStaticPaths() {
   return getAllSnippets(['slug']).map(({ slug }) => ({ params: { slug } }))
@@ -16,7 +15,7 @@ const { slug } = Astro.params
 const page = getPageContentBySlug(slug, ['title', 'image', 'slug', 'content', 'excerpt', 'date'])
 ---
 
-<MainLayout valid={true} content={{ title: page.title }}>
+<MainLayout content={{ title: page.title }}>
   <div class="pt-8 flex flex-col items-center text-center">
     <div class="flex flex-col items-center w-[90vw] sm:w-[75vw] lg:w-[50vw] space-y-8">
       <h1 class="leading-[3rem] text-4xl sm:text-5xl text-black">

@@ -1,10 +1,10 @@
 ---
-import { items } from 'src/config'
+import { items } from 'src/data'
 import Button from '@/components/Button.astro'
 import MainLayout from '@/layouts/MainLayout.astro'
 ---
 
-<MainLayout valid={items} content={{ title: 'Projects - Arian Architects' }}>
+<MainLayout content={{ title: 'Projects - Arian Architects' }}>
   <div class="pt-8 flex flex-col items-center text-center space-y-8">
     <h1 class="text-4xl sm:text-6xl text-black">Projects</h1>
     <a href="#projects">

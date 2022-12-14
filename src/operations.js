@@ -20,20 +20,3 @@ month[8] = 'September'
 month[9] = 'October'
 month[10] = 'November'
 month[11] = 'December'
-
-export const validateEmail = (email) => {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  return re.test(String(email).toLowerCase())
-}
-
-import prism from 'remark-prism'
-import { unified } from 'unified'
-import remarkParse from 'remark-parse'
-import remarkRehype from 'remark-rehype'
-import rehypeStringify from 'rehype-stringify'
-
-export default async function markdownToHtml(markdown) {
-  const result = await unified().use(remarkParse).use(prism).use(remarkRehype).use(rehypeStringify).process(markdown)
-  return result.toString()
-}
