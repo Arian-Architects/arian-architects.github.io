@@ -32,7 +32,12 @@ const specificProj = items.filter((item) => item.project == slug)[0]
         {new Array(specificProj.end - 1).fill(0).map((item, index) => (
           <div class="relative w-full text-center flex flex-col items-center py-5">
             <div class="rounded bg-gray-200 w-[300px] h-[250px]" />
-            <img loading="lazy" decoding="async" src={`/${slug}/${index + 1}.jpg`} class="shadow absolute w-[300px] h-[250px] object-cover" />
+            <img
+              loading="lazy"
+              decoding="async"
+              src={`/projects/${slug}/${index + 1}.jpg`}
+              class="shadow absolute w-[300px] h-[250px] object-cover"
+            />
           </div>
         ))}
       </div>
