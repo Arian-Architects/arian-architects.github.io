@@ -13,11 +13,11 @@ const { slug } = Astro.params
 const specificProj = items.filter((item) => item.project == slug)[0]
 ---
 
-<MainLayout content={{ title: 'Projects - Arian Architects' }}>
+<MainLayout content={{ title: `${slug.split(',')[0]} - Arian Architects` }}>
   <div class="pt-8 flex flex-col items-center text-center space-y-8">
     <h1 class="text-4xl sm:text-6xl text-black">{slug.split(',')[0]}</h1>
     <h2 class="text-4xl sm:text-6xl text-gray-500">{slug.split(',')[1]}</h2>
-    <a href="#project">
+    <a aria-label="Project Images" href="#project">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
         <path
           fill-rule="evenodd"
@@ -36,6 +36,7 @@ const specificProj = items.filter((item) => item.project == slug)[0]
               decoding="async"
               loading={index === 0 ? 'eager' : 'lazy'}
               src={`/projects/${slug}/${index + 1}.jpg`}
+              alt={`Image ${index} - ${slug.split(',')[0]}`}
               class="shadow absolute w-[300px] h-[250px] object-cover"
             />
           </div>
