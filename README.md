@@ -36,4 +36,4 @@ Arian Architects's marketing website is built with [Astro](https://astro.build),
 
 ## Author
 
-- Rishi Raj Jain ([@rishi_raj_jain_](https://twitter.com/rishi_raj_jain_))
+- Rishi Raj Jain ([@rishi*raj_jain*](https://twitter.com/rishi_raj_jain_))

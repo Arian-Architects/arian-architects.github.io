@@ -12,20 +12,8 @@ const {
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
-    <style is:global>
-      html {
-        scroll-behavior: smooth;
-      }
-      @font-face {
-        font-display: swap;
-        font-style: normal;
-        font-weight: 100 900;
-        font-family: 'Manrope';
-        src: url(/fonts/inter-var.woff2) format('woff2');
-      }
-    </style>
   </head>
-  <body class="flex flex-col font-display">
+  <body class="font-display flex flex-col">
     <Header />
     <slot />
     <Footer />
@@ -57,7 +45,7 @@ const {
                 },
                 (error) => {
                   console.error(`Service worker registration failed: ${error}`)
-                }
+                },
               )
             }
           })

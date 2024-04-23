@@ -14,30 +14,28 @@ const specificProj = items.filter((item) => item.project == slug)[0]
 ---
 
 <MainLayout content={{ title: `${slug.split(',')[0]} - Arian Architects` }}>
-  <div class="pt-8 flex flex-col items-center text-center space-y-8">
-    <h1 class="text-4xl sm:text-6xl text-black">{slug.split(',')[0]}</h1>
-    <h2 class="text-4xl sm:text-6xl text-gray-500">{slug.split(',')[1]}</h2>
+  <div class="flex flex-col items-center space-y-8 pt-8 text-center">
+    <h1 class="text-4xl text-black sm:text-6xl">{slug.split(',')[0]}</h1>
+    <h2 class="text-4xl text-gray-500 sm:text-6xl">{slug.split(',')[1]}</h2>
     <a aria-label="Project Images" href="#project">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
-        <path
-          fill-rule="evenodd"
-          d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
       </svg>
     </a>
-    <div id="project" class="mt-10 h-[1px] px-4 md:px-32 bg-gray-200 w-full"></div>
+    <div id="project" class="mt-10 h-[1px] w-full bg-gray-200 px-4 md:px-32"></div>
   </div>
   {
     specificProj && (
-      <div class="py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div class="grid grid-cols-1 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {new Array(specificProj.end - 1).fill(0).map((item, index) => (
-          <div class="relative w-full text-center flex flex-col items-center py-5">
-            <div class="rounded bg-gray-200 w-[300px] h-[250px]" />
+          <div class="relative flex w-full flex-col items-center py-5 text-center">
+            <div class="h-[250px] w-[300px] rounded bg-gray-200" />
             <img
               decoding="async"
               loading={index === 0 ? 'eager' : 'lazy'}
               src={`/projects/${slug}/${index + 1}.jpg`}
               alt={`Image ${index} - ${slug.split(',')[0]}`}
-              class="shadow absolute w-[300px] h-[250px] object-cover"
+              class="absolute h-[250px] w-[300px] object-cover shadow"
             />
           </div>
         ))}

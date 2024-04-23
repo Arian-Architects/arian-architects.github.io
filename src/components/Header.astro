@@ -2,24 +2,18 @@
 import HeaderLink from './HeaderLink.astro'
 ---
 
-<div class="border-b bg-opacity-75 py-2 w-full bg-white flex flex-col items-center">
-  <div class="flex flex-row items-center justify-between w-full px-4 md:px-32">
+<div class="flex w-full flex-col items-center border-b bg-white bg-opacity-75 py-2">
+  <div class="flex w-full flex-row items-center justify-between px-4 md:px-32">
     <HeaderLink href="/">
       <div class="relative flex flex-row items-center space-x-1">
-        <img
-          loading="lazy"
-          style="height: 22px"
-          alt="Arian Architects Logo"
-          src="/static/favicon-image.png"
-          class="absolute left-1 top-[0.5]"
-        />
-        <div class="w-[25px] h-[25px]"></div>
-        <span class="text-md md:text-xl text-black"> Arian Architects</span>
+        <img loading="lazy" style="height: 22px" alt="Arian Architects Logo" src="/static/favicon-image.png" class="absolute left-1 top-[0.5]" />
+        <div class="h-[25px] w-[25px]"></div>
+        <span class="text-md text-black md:text-xl"> Arian Architects</span>
       </div>
     </HeaderLink>
     <span class="flex flex-row space-x-5">
-      <HeaderLink className="text-md md:text-lg text-black" href="/projects">Projects</HeaderLink>
-      <HeaderLink className="text-md md:text-lg text-black" href="/blogs">Blogs</HeaderLink>
+      <HeaderLink className="text-md text-black md:text-lg" href="/projects">Projects</HeaderLink>
+      <HeaderLink className="text-md text-black md:text-lg" href="/blogs">Blogs</HeaderLink>
     </span>
   </div>
 </div>

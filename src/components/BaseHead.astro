@@ -1,5 +1,9 @@
 ---
 const { title, description, image = '/static/social-media-card.png' } = Astro.props
+
+import { join } from 'node:path'
+import { AstroFont } from 'astro-font'
+import { ViewTransitions } from 'astro:transitions'
 ---
 
 <!-- Global Metadata -->
@@ -29,3 +33,24 @@ const { title, description, image = '/static/social-media-card.png' } = Astro.pr
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:image" content={new URL(image, Astro.site.origin)} />
 <meta property="twitter:url" content={`${Astro.site.origin}${Astro.url.pathname}`} />
+
+<ViewTransitions />
+
+<AstroFont
+  config={[
+    {
+      name: 'Manrope',
+      src: [
+        {
+          style: 'normal',
+          weight: '100 900',
+          path: join(process.cwd(), 'public', 'fonts', 'inter-var.woff2'),
+        },
+      ],
+      preload: false,
+      display: 'swap',
+      selector: '.font-display',
+      fallback: 'sans-serif',
+    },
+  ]}
+/>
