@@ -13,7 +13,6 @@ self.addEventListener('activate', async (event) => {
         cacheNames.map((cacheName) => {
           if (!expectedCacheNamesSet.has(cacheName)) {
             // If this cache name isn't present in the set of "expected" cache names, then delete it.
-            console.log('[DROP]:', cacheName)
             return caches.delete(cacheName)
           }
         })
@@ -35,7 +34,6 @@ self.addEventListener('fetch', (event) => {
           }
           // Otherwise, if there is no entry in the cache for event.request, response will be
           // undefined, and we need to fetch() the resource.
-          // console.log(' No response for %s found in cache. About to fetch ' + 'from network…', event.request.url)
           // We call .clone() on the request since we might use it in a call to cache.put() later on.
           // Both fetch() and cache.put() "consume" the request, so we need to make a copy.
           // (see https://developer.mozilla.org/en-US/docs/Web/API/Request/clone)
@@ -53,17 +51,13 @@ self.addEventListener('fetch', (event) => {
               // the original response object which we will return back to the controlled page.
               // (see https://developer.mozilla.org/en-US/docs/Web/API/Request/clone)
               if (response.headers.get('content-type').includes('font')) {
-                console.log(event.request.url)
                 cache.put(event.request, response.clone())
               } else if (response.headers.get('content-type').includes('image')) {
-                console.log(event.request.url)
                 cache.put(event.request, response.clone())
               } else if (response.headers.get('content-type').includes('css')) {
-                console.log(event.request.url)
                 cache.put(event.request, response.clone())
               } else if (response.headers.get('content-type').includes('javascript')) {
                 if (!event.request.url.includes('service-worker.js')) {
-                  console.log(event.request.url)
                   cache.put(event.request, response.clone())
                 }
               }
