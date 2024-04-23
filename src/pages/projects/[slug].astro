@@ -18,7 +18,7 @@ let images: any[] = new Array(specificProj.end - 1).fill(0).map((_, index) => jo
 images = await Promise.all(images.map(i => {
   const { width, height } = imageSize(i)
   return {
-    width, height, image: relative(join(process.cwd(), 'public', 'projects'), i)
+    width, height, image: '/' + relative(join(process.cwd(), 'public'), i)
   }
 }))
 ---
