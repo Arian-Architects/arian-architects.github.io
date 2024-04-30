@@ -12,12 +12,41 @@ const {
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} />
+    <style is:global>
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .column {
+        flex: 33%;
+        max-width: 25%;
+        padding: 0 8px;
+      }
+      .column img {
+        width: 100%;
+        margin-top: 8px;
+        vertical-align: middle;
+      }
+      @media screen and (max-width: 800px) {
+        .column {
+          flex: 50%;
+          max-width: 50%;
+        }
+      }
+      @media screen and (max-width: 600px) {
+        .column {
+          flex: 100%;
+          max-width: 100%;
+        }
+      }
+    </style>
   </head>
   <body class="font-display flex flex-col">
     <Header />
     <slot />
     <Footer />
-    <script is:inline>
+    <!-- <script is:inline>
       if ('serviceWorker' in navigator) {
         fetch('/version.json')
           .then((res) => res.json())
@@ -60,6 +89,6 @@ const {
           })
         })
       })
-    </script>
+    </script> -->
   </body>
 </html>

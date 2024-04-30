@@ -1,26 +1,28 @@
 ---
-import { join, relative } from 'node:path'
 import { items } from 'src/data'
 import { imageSize } from 'image-size'
+import { join, relative } from 'node:path'
 import MainLayout from '@/layouts/MainLayout.astro'
 
 export function getStaticPaths() {
-  let constPaths = []
-  for (let i in items) constPaths.push({ params: { slug: items[i].project } })
-  return constPaths
+  return items.map((i) => ({ params: { slug: i.project }, props: i }))
 }
 
 const { slug } = Astro.params
 
-const specificProj = items.filter((item) => item.project == slug)[0]
+const specificProj = Astro.props
 
 let images: any[] = new Array(specificProj.end - 1).fill(0).map((_, index) => join(process.cwd(), 'public', 'projects', slug, `${index + 1}.jpg`))
-images = await Promise.all(images.map(i => {
-  const { width, height } = imageSize(i)
-  return {
-    width, height, image: '/' + relative(join(process.cwd(), 'public'), i)
-  }
-}))
+images = await Promise.all(
+  images.map((i) => {
+    const { width, height } = imageSize(i)
+    return {
+      width,
+      height,
+      image: '/' + relative(join(process.cwd(), 'public'), i),
+    }
+  }),
+)
 ---
 
 <MainLayout content={{ title: `${slug.split(',')[0]} - Arian Architects` }}>
@@ -34,28 +36,19 @@ images = await Promise.all(images.map(i => {
     </a>
     <div id="project" class="mt-10 h-[1px] w-full bg-gray-200 px-4 md:px-32"></div>
   </div>
-  {
-    specificProj && (
-      <div id="my-gallery" class="grid grid-cols-1 py-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {images.map(({ image, width, height }, index) => (
-          <div class="relative flex w-full flex-col items-center py-5 text-center">
-            <div class="h-[250px] w-[300px] rounded bg-gray-200" />
+  <div id="my-gallery" class="row p-8">
+    {
+      new Array(3).fill(0).map((_, columnIndex) => (
+        <div class="column">
+          {images.slice(Math.floor(images.length / 3) * columnIndex, Math.floor(images.length / 3) * (columnIndex + 1)).map(({ image, width, height }, index) => (
             <a href={image} data-pswp-width={width} data-pswp-height={height} class="contents">
-              <img
-                src={image}
-                width={width}
-                height={height}
-                decoding="async"
-                loading={index === 0 ? 'eager' : 'lazy'}
-                alt={`Image ${index} - ${slug.split(',')[0]}`}
-                class="absolute h-[250px] w-[300px] object-cover shadow"
-              />
+              <img src={image} width={width} height={height} decoding="async" loading={index === 0 ? 'eager' : 'lazy'} alt={`Image ${index} - ${slug.split(',')[0]}`} />
             </a>
-          </div>
-        ))}
-      </div>
-    )
-  }
+          ))}
+        </div>
+      ))
+    }
+  </div>
 </MainLayout>
 
 <script>

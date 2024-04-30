@@ -1,7 +1,21 @@
 ---
 import { items } from 'src/data'
+import { imageSize } from 'image-size'
+import { join, relative } from 'node:path'
 import Button from '@/components/Button.astro'
 import MainLayout from '@/layouts/MainLayout.astro'
+
+let images: any[] = items.map(({ project }) => join(process.cwd(), 'public', 'projects', project, '1.jpg'))
+images = await Promise.all(
+  images.map((i) => {
+    const { width, height } = imageSize(i)
+    return {
+      width,
+      height,
+      image: '/' + relative(join(process.cwd(), 'public'), i),
+    }
+  }),
+)
 ---
 
 <MainLayout content={{ title: 'Projects - Arian Architects' }}>
@@ -16,21 +30,22 @@ import MainLayout from '@/layouts/MainLayout.astro'
   <div id="projects" class="mt-10 h-[1px] w-full bg-gray-200 px-4 md:px-32"></div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
     {
-      items &&
-        items.map((item, index) => (
-          <div class="relative flex w-full flex-col items-center border border-gray-100 py-10 text-center">
-            <div class="h-[250px] w-[300px] bg-gray-200" />
-            <img
-              alt={item.project.split(',')[0]}
-              src={`/projects/${item.project}/1.jpg`}
-              loading={index === 0 ? 'eager' : 'lazy'}
-              class="absolute h-[250px] w-[300px] object-cover shadow"
-            />
-            <h1 class="mt-5 w-[300px] text-4xl text-black">{item.project.split(',')[0]}</h1>
-            <h2 class="mt-3 mb-8 w-[300px] text-3xl text-gray-500">{item.project.split(',')[1]}</h2>
-            <Button href={`/projects/${item.project}`} link={true} mode={false} w="mt-auto w-[250px]" text={'View Project'} />
-          </div>
-        ))
+      items?.map((item, index) => (
+        <div class="flex w-full flex-col p-8">
+          <img
+            src={images[index].image}
+            width={images[index].width}
+            height={images[index].height}
+            alt={item.project.split(',')[0]}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            class="h-[300px] w-full object-cover object-center"
+          />
+          <h1 class="mt-5 text-4xl text-black">{item.project.split(',')[0]}</h1>
+          <h2 class="mt-3 text-2xl text-gray-500">{item.project.split(',')[1]}</h2>
+          <div class="mt-3" />
+          <Button href={`/projects/${item.project}`} link={true} mode={false} w="mt-auto max-w-max" text={'View Project →'} />
+        </div>
+      ))
     }
   </div>
 </MainLayout>
