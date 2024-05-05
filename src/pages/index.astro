@@ -1,14 +1,20 @@
 ---
-import { SITE_TITLE } from 'src/seo'
+import { SITE_TITLE } from '@/seo'
+
+import { getImages } from '@/imagekit'
 import Button from '@/components/Button.astro'
 import MainLayout from '@/layouts/MainLayout.astro'
+
+const allImages = await getImages()
+
+const firstImage = allImages.find((i) => i.url.includes('Rakesh Kohli, Inderpuri/1.jpg'))
 ---
 
 <MainLayout content={{ title: SITE_TITLE }}>
   <div class="flex flex-col items-center space-y-8 pt-8 text-center">
     <h1 class="text-4xl text-black sm:text-6xl">Arian Architects</h1>
     <h2 class="text-4xl text-gray-500 sm:text-6xl">Redefining your lifestyle.</h2>
-    <div class="flex flex-col items-center space-y-8 pt-8 md:flex-row md:space-y-0 md:space-x-8">
+    <div class="flex flex-col items-center space-y-8 pt-8 md:flex-row md:space-x-8 md:space-y-0">
       <Button href={'mailto:arianarchitects@gmail.com'} link={false} mode={true} text={'Get in touch'} />
       <Button href={'/projects'} link={true} mode={false} text={'Projects'} />
     </div>
@@ -29,9 +35,10 @@ import MainLayout from '@/layouts/MainLayout.astro'
     <img
       loading="lazy"
       decoding="async"
+      src={firstImage.url}
+      width={firstImage.width}
+      height={firstImage.height}
       alt="Showcase Project - Inderpuri"
-      style="content-visibility: auto;"
-      src="/projects/Rakesh%20Kohli,%20Inderpuri/1.jpg"
       class="h-[150px] w-auto shadow-lg sm:h-[300px] md:h-[500px]"
     />
     <Button href="/projects" w="w-[250px]" link={true} mode={true} text="View Projects" />

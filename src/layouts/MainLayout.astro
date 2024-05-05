@@ -46,49 +46,5 @@ const {
     <Header />
     <slot />
     <Footer />
-    <script is:inline>
-      if ('serviceWorker' in navigator) {
-        fetch('/version.json')
-          .then((res) => res.json())
-          .then((res) => {
-            if (res && res.version) {
-              localStorage.setItem('received-sw-version', res.version)
-              navigator.serviceWorker.register('/service-worker.js').then(
-                (registration) => {
-                  const swVersion = localStorage.getItem('sw-version')
-                  if (swVersion) {
-                    if (swVersion !== res.version) {
-                      self.caches.delete('prefetch').then(() => {
-                        registration.update().then(() => {
-                          // Update the version if updated locally
-                          localStorage.setItem('sw-version', res.version)
-                        })
-                      })
-                    }
-                  } else {
-                    localStorage.setItem('sw-version', res.version)
-                  }
-                },
-                (error) => {
-                  console.error(`Service worker registration failed: ${error}`)
-                },
-              )
-            }
-          })
-      } else {
-        console.error('Service workers are not supported.')
-      }
-      window.addEventListener('load', (event) => {
-        const attrs = ['href', 'src', 'srcset', 'data-src']
-        attrs.forEach((j) => {
-          document.querySelectorAll(`[${j}^="/"]`).forEach((i) => {
-            let sc = document.createElement('link')
-            sc.setAttribute('rel', 'prefetch')
-            sc.setAttribute('href', i.getAttribute(j))
-            document.head.appendChild(sc)
-          })
-        })
-      })
-    </script>
   </body>
 </html>
