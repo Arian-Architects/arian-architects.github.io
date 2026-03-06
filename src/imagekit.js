@@ -16,7 +16,6 @@ export async function getImages() {
   //   limit: 999,
   // })
   // const arian = tmp.filter((i) => i.url.includes('/projects/'))
-  const arian = []
   const imagekit_jain71 = new ImageKit({
     publicKey: process.env.PUBLIC_KEY_JAIN71,
     privateKey: process.env.PRIVATE_KEY_JAIN71,
@@ -26,6 +25,6 @@ export async function getImages() {
     skip: 0,
     limit: 999,
   })
-  writeFileSync(jsonPath, JSON.stringify([...arian, ...tmp_jain71]), 'utf8')
-  return [...arian, ...tmp_jain71]
+  writeFileSync(jsonPath, JSON.stringify(tmp_jain71), 'utf8')
+  return tmp_jain71
 }

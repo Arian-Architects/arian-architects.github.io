@@ -6,7 +6,7 @@ import Button from '@/components/Button.astro'
 import MainLayout from '@/layouts/MainLayout.astro'
 
 const allImages = await getImages()
-const firstImage = allImages.find((i) => i.url.includes('Rakesh Kohli, Inderpuri/1.jpg'))
+const firstImage = allImages.find((i) => i.filePath.includes('Rakesh Kohli, Inderpuri/1.jpg'))
 ---
 
 <MainLayout content={{ title: SITE_TITLE }}>
