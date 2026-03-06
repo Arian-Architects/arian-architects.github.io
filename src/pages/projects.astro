@@ -28,6 +28,7 @@ allImages.forEach((i) => {
     {
       Object.keys(allProjects).map((item, index) => (
         <div class="flex w-full flex-col p-8">
+          <a href={`/projects/${item}`}>
           <img
             alt={item}
             decoding="async"
@@ -37,6 +38,7 @@ allImages.forEach((i) => {
             loading={index === 0 ? 'eager' : 'lazy'}
             class="h-[300px] w-full object-cover object-center"
           />
+          </a>
           <h1 class="mt-5 text-4xl text-black">{item.split(',')[0]}</h1>
           <h2 class="mt-3 text-2xl text-gray-500">{item.split(',')[1]}</h2>
           <div class="mt-3" />
