@@ -25,6 +25,9 @@ export async function getImages() {
     skip: 0,
     limit: 999,
   })
+  tmp_jain71.forEach((i, _) => {
+    tmp_jain71[_]['url'] = i.url.split('?')[0]
+  })
   writeFileSync(jsonPath, JSON.stringify(tmp_jain71), 'utf8')
   return tmp_jain71
 }

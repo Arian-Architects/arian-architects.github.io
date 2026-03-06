@@ -37,16 +37,62 @@ const specificProj = Astro.props
         <div class="column">
           {specificProj.images
             .slice(Math.floor(specificProj.images.length / 3) * columnIndex, Math.floor(specificProj.images.length / 3) * (columnIndex + 1))
-            .map(({ url: image, width, height }, index) => (
-              <a href={image} data-pswp-width={width} data-pswp-height={height} class="contents">
-                <img src={image} width={width} height={height} decoding="async" loading={index === 0 ? 'eager' : 'lazy'} alt={`Image ${index} - ${slug.split(',')[0]}`} />
-              </a>
-            ))}
+            .map(({ url: image, width, height }, index) => {
+              const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
+              return (
+                <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
+                  <span class="img-placeholder">
+                    <img src={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" fetchpriority={index === 0 ? 'high' : 'auto'} />
+                  </span>
+                  <img
+                    src={image}
+                    width={width}
+                    height={height}
+                    decoding="async"
+                    class="img-full"
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    alt={`Image ${index} - ${slug.split(',')[0]}`}
+                  />
+                </a>
+              )
+            })}
         </div>
       ))
     }
   </div>
 </MainLayout>
+
+<style>
+  .img-wrap {
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+  .img-placeholder {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .img-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .img-full {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .img-full.is-loaded {
+    opacity: 1;
+  }
+</style>
 
 <script>
   import 'photoswipe/style.css'
@@ -63,6 +109,16 @@ const specificProj = Astro.props
     'astro:page-load',
     () => {
       if (lightbox) lightbox.init()
+      document.querySelectorAll('.img-full').forEach((el) => {
+        const img = el as HTMLImageElement
+        const removePlaceholder = () => {
+          img.classList.add('is-loaded')
+          const placeholder = img.parentElement?.querySelector('.img-placeholder')
+          if (placeholder) placeholder.remove()
+        }
+        if (img.complete) removePlaceholder()
+        else img.addEventListener('load', removePlaceholder)
+      })
     },
     { once: false },
   )
