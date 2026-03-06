@@ -21,6 +21,9 @@ jobs:
           PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           IMAGEKIT_URL: ${{ secrets.IMAGEKIT_URL }}
+          PUBLIC_KEY_JAIN71: ${{ secrets.PUBLIC_KEY_JAIN71 }}
+          PRIVATE_KEY_JAIN71: ${{ secrets.PRIVATE_KEY_JAIN71 }}
+          IMAGEKIT_URL_JAIN71: ${{ secrets.IMAGEKIT_URL_JAIN71 }}
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:

@@ -4,27 +4,15 @@ import MainLayout from '@/layouts/MainLayout.astro'
 
 export async function getStaticPaths() {
   const allImages = await getImages()
-  const allProjects = [
-    ...new Set(
-      allImages
-        .filter((i) => i.url.includes('1.'))
-        .map((i) => {
-          const tmp = i.url
-          const split = tmp.split('/')
-          return split[split.length - 2]
-        }),
-    ),
-  ]
-  const allProjectImages = {}
+  const allProjects = {}
   allImages.forEach((i) => {
-    allProjects.forEach((j) => {
-      if (i.url.includes(`/${j}/`)) {
-        if (!allProjectImages[j]) allProjectImages[j] = []
-        allProjectImages[j].push(i)
-      }
-    })
+    const tmp = i.filePath
+    const split = tmp.split('/').filter(Boolean)
+    const project = split[0]
+    if (!allProjects[project]) allProjects[project] = []
+    allProjects[project].push(i)
   })
-  return allProjects.map((i) => ({ params: { slug: i }, props: { images: allProjectImages[i] } }))
+  return Object.keys(allProjects).map((i) => ({ params: { slug: i }, props: { images: allProjects[i] } }))
 }
 
 const { slug } = Astro.params

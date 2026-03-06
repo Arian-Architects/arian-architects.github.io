@@ -4,25 +4,13 @@ import Button from '@/components/Button.astro'
 import MainLayout from '@/layouts/MainLayout.astro'
 
 const allImages = await getImages()
-
-const allProjects = [
-  ...new Set(
-    allImages
-      .filter((i) => i.url.includes('1.'))
-      .map((i) => {
-        const tmp = i.url
-        const split = tmp.split('/')
-        return split[split.length - 2]
-      }),
-  ),
-]
-
-const projectFirstImages: string[] = []
-
+const allProjects = {}
 allImages.forEach((i) => {
-  allProjects.forEach((j) => {
-    if (i.url.endsWith(`${j}/1.jpg`) && !projectFirstImages.includes(i.url)) projectFirstImages.push(i)
-  })
+  const tmp = i.filePath
+  const split = tmp.split('/').filter(Boolean)
+  const project = split[0]
+  if (!allProjects[project]) allProjects[project] = []
+  allProjects[project].push(i)
 })
 ---
 
@@ -38,14 +26,14 @@ allImages.forEach((i) => {
   <div id="projects" class="mt-10 h-[1px] w-full bg-gray-200 px-4 md:px-32"></div>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
     {
-      allProjects?.map((item, index) => (
+      Object.keys(allProjects).map((item, index) => (
         <div class="flex w-full flex-col p-8">
           <img
             alt={item}
             decoding="async"
-            src={projectFirstImages[index].url}
-            width={projectFirstImages[index].width}
-            height={projectFirstImages[index].height}
+            src={allProjects[item][0].url}
+            width={allProjects[item][0].width}
+            height={allProjects[item][0].height}
             loading={index === 0 ? 'eager' : 'lazy'}
             class="h-[300px] w-full object-cover object-center"
           />
