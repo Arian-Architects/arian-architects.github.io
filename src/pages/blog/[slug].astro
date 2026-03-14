@@ -28,7 +28,7 @@ const page = getPageContentBySlug(slug, ['title', 'image', 'slug', 'content', 'e
       </div>
     </div>
   </div>
-  <div id="blog" class="mt-10 mb-10 h-[1px] w-full bg-gray-200 px-4 md:px-32"></div>
+  <div id="blog" class="mb-10 mt-10 h-[1px] w-full bg-gray-200 px-4 md:px-32"></div>
   <div class="flex w-full flex-col items-center">
     <div class="flex w-[90vw] flex-col items-start pb-10 sm:w-[75vw] lg:w-[50vw]">
       <div class="flex w-full flex-col items-start space-y-8">
@@ -39,7 +39,7 @@ const page = getPageContentBySlug(slug, ['title', 'image', 'slug', 'content', 'e
             alt="Blog Cover Image"
             title="Blog Cover Image"
             src={`/blog/${page.image}`}
-            class="absolute top-0 left-0 h-[250px] w-[90vw] rounded object-cover sm:w-[75vw] lg:w-[50vw]"
+            class="absolute left-0 top-0 h-[250px] w-[90vw] rounded object-cover sm:w-[75vw] lg:w-[50vw]"
           />
         </div>
         <article set:html={markdownToHtml(page.content)} class="prose max-w-none" />

@@ -50,9 +50,7 @@ const galleryPanels =
 function renderGalleryColumns(imgs) {
   const total = imgs.length
   const perCol = Math.floor(total / 3) || 1
-  return [0, 1, 2].map((columnIndex) =>
-    imgs.slice(perCol * columnIndex, perCol * (columnIndex + 1))
-  )
+  return [0, 1, 2].map((columnIndex) => imgs.slice(perCol * columnIndex, perCol * (columnIndex + 1)))
 }
 ---
 
@@ -67,61 +65,56 @@ function renderGalleryColumns(imgs) {
     </a>
     <div id="project" class="mt-10 h-[1px] w-full bg-gray-200 px-4 md:px-32"></div>
   </div>
-  {galleryPanels ? (
-    <>
-      <div class="flex flex-wrap justify-center gap-2 px-8 pt-4" id="gallery-filters" role="tablist">
-        {galleryPanels.map((panel, i) => (
-          <button
-            type="button"
-            class={`gallery-filter-btn ${i === 0 ? 'is-active' : ''}`}
-            data-gallery-filter={panel.key}
-            role="tab"
-          >
-            {panel.label}
-          </button>
-        ))}
-      </div>
-      {galleryPanels.map((panel, panelIndex) => {
-        const columns = renderGalleryColumns(panel.images)
-        return (
-          <div
-            id={`my-gallery-${panel.key.replace(/\s+/g, '-')}`}
-            class={`gallery-panel row p-8 ${panelIndex > 0 ? 'gallery-panel-hidden' : ''}`}
-            data-gallery-panel={panel.key}
-            role="tabpanel"
-          >
-            {columns.map((columnImages) => (
-              <div class="column">
-                {columnImages.map(({ url: image, width, height }, index) => {
-                  const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
-                  const isFirst = panelIndex === 0 && index === 0
-                  return (
-                    <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
-                      <span class="img-placeholder">
-                        <img src={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" fetchpriority={isFirst ? 'high' : 'auto'} />
-                      </span>
-                      <img
-                        src={image}
-                        width={width}
-                        height={height}
-                        decoding="async"
-                        class="img-full"
-                        loading={isFirst ? 'eager' : 'lazy'}
-                        alt={`Image ${index} - ${slug.split(',')[0]}`}
-                      />
-                    </a>
-                  )
-                })}
-              </div>
-            ))}
-          </div>
-        )
-      })}
-    </>
-  ) : (
-    <div id="my-gallery" class="row p-8">
-      {
-        new Array(3).fill(0).map((_, columnIndex) => (
+  {
+    galleryPanels ? (
+      <>
+        <div class="flex flex-wrap justify-center gap-2 px-8 pt-4" id="gallery-filters" role="tablist">
+          {galleryPanels.map((panel, i) => (
+            <button type="button" class={`gallery-filter-btn ${i === 0 ? 'is-active' : ''}`} data-gallery-filter={panel.key} role="tab">
+              {panel.label}
+            </button>
+          ))}
+        </div>
+        {galleryPanels.map((panel, panelIndex) => {
+          const columns = renderGalleryColumns(panel.images)
+          return (
+            <div
+              id={`my-gallery-${panel.key.replace(/\s+/g, '-')}`}
+              class={`gallery-panel row p-8 ${panelIndex > 0 ? 'gallery-panel-hidden' : ''}`}
+              data-gallery-panel={panel.key}
+              role="tabpanel"
+            >
+              {columns.map((columnImages) => (
+                <div class="column">
+                  {columnImages.map(({ url: image, width, height }, index) => {
+                    const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
+                    const isFirst = panelIndex === 0 && index === 0
+                    return (
+                      <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
+                        <span class="img-placeholder">
+                          <img src={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" fetchpriority={isFirst ? 'high' : 'auto'} />
+                        </span>
+                        <img
+                          src={image}
+                          width={width}
+                          height={height}
+                          decoding="async"
+                          class="img-full"
+                          loading={isFirst ? 'eager' : 'lazy'}
+                          alt={`Image ${index} - ${slug.split(',')[0]}`}
+                        />
+                      </a>
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
+          )
+        })}
+      </>
+    ) : (
+      <div id="my-gallery" class="row p-8">
+        {new Array(3).fill(0).map((_, columnIndex) => (
           <div class="column">
             {imagesWithGroup
               .slice(Math.floor(imagesWithGroup.length / 3) * columnIndex, Math.floor(imagesWithGroup.length / 3) * (columnIndex + 1))
@@ -145,10 +138,10 @@ function renderGalleryColumns(imgs) {
                 )
               })}
           </div>
-        ))
-      }
-    </div>
-  )}
+        ))}
+      </div>
+    )
+  }
 </MainLayout>
 
 <style>
@@ -188,7 +181,9 @@ function renderGalleryColumns(imgs) {
     background: #fff;
     font-size: 0.875rem;
     cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
+    transition:
+      background 0.15s,
+      border-color 0.15s;
   }
   .gallery-filter-btn:hover {
     background: #f3f4f6;
@@ -216,7 +211,7 @@ function renderGalleryColumns(imgs) {
       if (panels.length > 0) {
         panels.forEach((panel) => {
           const id = panel.id
-          if (!id) return``
+          if (!id) return ``
           new PhotoSwipeLightbox({
             pswpModule,
             children: 'a',
