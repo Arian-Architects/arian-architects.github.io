@@ -18,6 +18,20 @@ export async function getStaticPaths() {
 const { slug } = Astro.params
 
 const specificProj = Astro.props
+
+/** @param {string} filePath */
+function getLambdaGroup(filePath) {
+  const name = filePath.split('/').pop() || ''
+  if (!name.includes('LAMBDA')) return null
+  const before = name.split(/LAMBDA/i)[0] || ''
+  return before.replace(/-+$/, '').trim() || null
+}
+
+const imagesWithGroup = specificProj.images.map((img) => ({
+  ...img,
+  group: getLambdaGroup(img.filePath || ''),
+}))
+const lambdaGroups = [...new Set(imagesWithGroup.map((i) => i.group).filter(Boolean))].sort()
 ---
 
 <MainLayout content={{ title: `${slug.split(',')[0]} - Arian Architects` }}>
@@ -31,16 +45,34 @@ const specificProj = Astro.props
     </a>
     <div id="project" class="mt-10 h-[1px] w-full bg-gray-200 px-4 md:px-32"></div>
   </div>
+  {lambdaGroups.length > 0 && (
+    <div class="flex flex-wrap justify-center gap-2 px-8 pt-4" id="gallery-filters" role="tablist">
+      {lambdaGroups.length > 1 && <button type="button" class="gallery-filter-btn is-active" data-gallery-filter="all" role="tab">
+        All
+      </button>}
+      {lambdaGroups.map((g) => (
+        <button type="button" class="gallery-filter-btn" data-gallery-filter={g} role="tab">
+          {g.replace(/-/g, ' ')}
+        </button>
+      ))}
+    </div>
+  )}
   <div id="my-gallery" class="row p-8">
     {
       new Array(3).fill(0).map((_, columnIndex) => (
         <div class="column">
-          {specificProj.images
-            .slice(Math.floor(specificProj.images.length / 3) * columnIndex, Math.floor(specificProj.images.length / 3) * (columnIndex + 1))
-            .map(({ url: image, width, height }, index) => {
+          {imagesWithGroup
+            .slice(Math.floor(imagesWithGroup.length / 3) * columnIndex, Math.floor(imagesWithGroup.length / 3) * (columnIndex + 1))
+            .map(({ url: image, width, height, group }, index) => {
               const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
               return (
-                <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
+                <a
+                  href={image}
+                  data-pswp-width={width}
+                  data-pswp-height={height}
+                  data-gallery-group={group || 'all'}
+                  class="img-wrap"
+                >
                   <span class="img-placeholder">
                     <img src={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" fetchpriority={index === 0 ? 'high' : 'auto'} />
                   </span>
@@ -92,6 +124,27 @@ const specificProj = Astro.props
   .img-full.is-loaded {
     opacity: 1;
   }
+  .gallery-filter-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background: #fff;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .gallery-filter-btn:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+  }
+  .gallery-filter-btn.is-active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+  }
+  .img-wrap.gallery-hidden {
+    display: none !important;
+  }
 </style>
 
 <script>
@@ -118,6 +171,25 @@ const specificProj = Astro.props
         }
         if (img.complete) removePlaceholder()
         else img.addEventListener('load', removePlaceholder)
+      })
+
+      const filtersEl = document.getElementById('gallery-filters')
+      if (!filtersEl) return
+      const wrapEl = document.getElementById('my-gallery')
+      if (!wrapEl) return
+      const items = wrapEl.querySelectorAll('.img-wrap[data-gallery-group]')
+
+      filtersEl.querySelectorAll('.gallery-filter-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const filter = (btn as HTMLButtonElement).dataset.galleryFilter
+          filtersEl.querySelectorAll('.gallery-filter-btn').forEach((b) => b.classList.remove('is-active'))
+          btn.classList.add('is-active')
+          items.forEach((el) => {
+            const group = el.getAttribute('data-gallery-group')
+            if (filter === 'all' || group === filter) el.classList.remove('gallery-hidden')
+            else el.classList.add('gallery-hidden')
+          })
+        })
       })
     },
     { once: false },
