@@ -32,6 +32,28 @@ const imagesWithGroup = specificProj.images.map((img) => ({
   group: getLambdaGroup(img.filePath || ''),
 }))
 const lambdaGroups = [...new Set(imagesWithGroup.map((i) => i.group).filter(Boolean))].sort()
+
+/** Images grouped by Lambda group for panel galleries; when no groups, null */
+const galleryPanels =
+  lambdaGroups.length > 0
+    ? [
+        { key: 'all', images: imagesWithGroup, label: 'All' },
+        ...lambdaGroups.map((key) => ({
+          key,
+          images: imagesWithGroup.filter((i) => i.group === key),
+          label: key.replace(/-/g, ' '),
+        })),
+      ]
+    : null
+
+/** @param {typeof imagesWithGroup} imgs */
+function renderGalleryColumns(imgs) {
+  const total = imgs.length
+  const perCol = Math.floor(total / 3) || 1
+  return [0, 1, 2].map((columnIndex) =>
+    imgs.slice(perCol * columnIndex, perCol * (columnIndex + 1))
+  )
+}
 ---
 
 <MainLayout content={{ title: `${slug.split(',')[0]} - Arian Architects` }}>
@@ -45,53 +67,88 @@ const lambdaGroups = [...new Set(imagesWithGroup.map((i) => i.group).filter(Bool
     </a>
     <div id="project" class="mt-10 h-[1px] w-full bg-gray-200 px-4 md:px-32"></div>
   </div>
-  {lambdaGroups.length > 0 && (
-    <div class="flex flex-wrap justify-center gap-2 px-8 pt-4" id="gallery-filters" role="tablist">
-      {lambdaGroups.length > 1 && <button type="button" class="gallery-filter-btn is-active" data-gallery-filter="all" role="tab">
-        All
-      </button>}
-      {lambdaGroups.map((g) => (
-        <button type="button" class="gallery-filter-btn" data-gallery-filter={g} role="tab">
-          {g.replace(/-/g, ' ')}
-        </button>
-      ))}
+  {galleryPanels ? (
+    <>
+      <div class="flex flex-wrap justify-center gap-2 px-8 pt-4" id="gallery-filters" role="tablist">
+        {galleryPanels.map((panel, i) => (
+          <button
+            type="button"
+            class={`gallery-filter-btn ${i === 0 ? 'is-active' : ''}`}
+            data-gallery-filter={panel.key}
+            role="tab"
+          >
+            {panel.label}
+          </button>
+        ))}
+      </div>
+      {galleryPanels.map((panel, panelIndex) => {
+        const columns = renderGalleryColumns(panel.images)
+        return (
+          <div
+            id={`my-gallery-${panel.key.replace(/\s+/g, '-')}`}
+            class={`gallery-panel row p-8 ${panelIndex > 0 ? 'gallery-panel-hidden' : ''}`}
+            data-gallery-panel={panel.key}
+            role="tabpanel"
+          >
+            {columns.map((columnImages) => (
+              <div class="column">
+                {columnImages.map(({ url: image, width, height }, index) => {
+                  const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
+                  const isFirst = panelIndex === 0 && index === 0
+                  return (
+                    <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
+                      <span class="img-placeholder">
+                        <img src={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" fetchpriority={isFirst ? 'high' : 'auto'} />
+                      </span>
+                      <img
+                        src={image}
+                        width={width}
+                        height={height}
+                        decoding="async"
+                        class="img-full"
+                        loading={isFirst ? 'eager' : 'lazy'}
+                        alt={`Image ${index} - ${slug.split(',')[0]}`}
+                      />
+                    </a>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
+        )
+      })}
+    </>
+  ) : (
+    <div id="my-gallery" class="row p-8">
+      {
+        new Array(3).fill(0).map((_, columnIndex) => (
+          <div class="column">
+            {imagesWithGroup
+              .slice(Math.floor(imagesWithGroup.length / 3) * columnIndex, Math.floor(imagesWithGroup.length / 3) * (columnIndex + 1))
+              .map(({ url: image, width, height }, index) => {
+                const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
+                return (
+                  <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
+                    <span class="img-placeholder">
+                      <img src={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" fetchpriority={index === 0 ? 'high' : 'auto'} />
+                    </span>
+                    <img
+                      src={image}
+                      width={width}
+                      height={height}
+                      decoding="async"
+                      class="img-full"
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      alt={`Image ${index} - ${slug.split(',')[0]}`}
+                    />
+                  </a>
+                )
+              })}
+          </div>
+        ))
+      }
     </div>
   )}
-  <div id="my-gallery" class="row p-8">
-    {
-      new Array(3).fill(0).map((_, columnIndex) => (
-        <div class="column">
-          {imagesWithGroup
-            .slice(Math.floor(imagesWithGroup.length / 3) * columnIndex, Math.floor(imagesWithGroup.length / 3) * (columnIndex + 1))
-            .map(({ url: image, width, height, group }, index) => {
-              const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
-              return (
-                <a
-                  href={image}
-                  data-pswp-width={width}
-                  data-pswp-height={height}
-                  data-gallery-group={group || 'all'}
-                  class="img-wrap"
-                >
-                  <span class="img-placeholder">
-                    <img src={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" fetchpriority={index === 0 ? 'high' : 'auto'} />
-                  </span>
-                  <img
-                    src={image}
-                    width={width}
-                    height={height}
-                    decoding="async"
-                    class="img-full"
-                    loading={index === 0 ? 'eager' : 'lazy'}
-                    alt={`Image ${index} - ${slug.split(',')[0]}`}
-                  />
-                </a>
-              )
-            })}
-        </div>
-      ))
-    }
-  </div>
 </MainLayout>
 
 <style>
@@ -142,7 +199,7 @@ const lambdaGroups = [...new Set(imagesWithGroup.map((i) => i.group).filter(Bool
     color: #fff;
     border-color: #111;
   }
-  .img-wrap.gallery-hidden {
+  .gallery-panel.gallery-panel-hidden {
     display: none !important;
   }
 </style>
@@ -152,16 +209,31 @@ const lambdaGroups = [...new Set(imagesWithGroup.map((i) => i.group).filter(Bool
   import pswpModule from 'photoswipe'
   import PhotoSwipeLightbox from 'photoswipe/lightbox'
 
-  window.lightbox = new PhotoSwipeLightbox({
-    pswpModule,
-    children: 'a',
-    gallery: '#my-gallery',
-  })
-
   document.addEventListener(
     'astro:page-load',
     () => {
-      if (lightbox) lightbox.init()
+      const panels = document.querySelectorAll('.gallery-panel')
+      if (panels.length > 0) {
+        panels.forEach((panel) => {
+          const id = panel.id
+          if (!id) return``
+          new PhotoSwipeLightbox({
+            pswpModule,
+            children: 'a',
+            gallery: `#${id}`,
+          }).init()
+        })
+      } else {
+        const gallery = document.getElementById('my-gallery')
+        if (gallery) {
+          new PhotoSwipeLightbox({
+            pswpModule,
+            children: 'a',
+            gallery: '#my-gallery',
+          }).init()
+        }
+      }
+
       document.querySelectorAll('.img-full').forEach((el) => {
         const img = el as HTMLImageElement
         const removePlaceholder = () => {
@@ -175,19 +247,17 @@ const lambdaGroups = [...new Set(imagesWithGroup.map((i) => i.group).filter(Bool
 
       const filtersEl = document.getElementById('gallery-filters')
       if (!filtersEl) return
-      const wrapEl = document.getElementById('my-gallery')
-      if (!wrapEl) return
-      const items = wrapEl.querySelectorAll('.img-wrap[data-gallery-group]')
+      const panelEls = document.querySelectorAll('.gallery-panel')
 
       filtersEl.querySelectorAll('.gallery-filter-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
           const filter = (btn as HTMLButtonElement).dataset.galleryFilter
+          if (!filter) return
           filtersEl.querySelectorAll('.gallery-filter-btn').forEach((b) => b.classList.remove('is-active'))
           btn.classList.add('is-active')
-          items.forEach((el) => {
-            const group = el.getAttribute('data-gallery-group')
-            if (filter === 'all' || group === filter) el.classList.remove('gallery-hidden')
-            else el.classList.add('gallery-hidden')
+          panelEls.forEach((el) => {
+            if (el.getAttribute('data-gallery-panel') === filter) el.classList.remove('gallery-panel-hidden')
+            else el.classList.add('gallery-panel-hidden')
           })
         })
       })
