@@ -19,6 +19,15 @@ const { slug } = Astro.params
 
 const specificProj = Astro.props
 
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.webm', '.mov', '.ogg', '.m4v', '.avi'])
+
+/** @param {string} path */
+function isVideoFile(path) {
+  const lower = path.toLowerCase()
+  const i = lower.lastIndexOf('.')
+  return i !== -1 && VIDEO_EXTENSIONS.has(lower.slice(i))
+}
+
 /** @param {string} filePath */
 function getLambdaGroup(filePath) {
   const name = filePath.split('/').pop() || ''
@@ -30,6 +39,7 @@ function getLambdaGroup(filePath) {
 const imagesWithGroup = specificProj.images.map((img) => ({
   ...img,
   group: getLambdaGroup(img.filePath || ''),
+  isVideo: isVideoFile(img.filePath || img.url || ''),
 }))
 const lambdaGroups = [...new Set(imagesWithGroup.map((i) => i.group).filter(Boolean))].sort()
 
@@ -80,15 +90,30 @@ function renderGalleryColumns(imgs) {
           return (
             <div
               id={`my-gallery-${panel.key.replace(/\s+/g, '-')}`}
-              class={`gallery-panel row p-8 ${panelIndex > 0 ? 'gallery-panel-hidden' : ''}`}
+              class={`gallery-panel row p-8 ${panelIndex > 0 ? 'gallery-panel-hidden' : ''} ${panel.images.length === 1 ? 'gallery-panel-single' : ''}`}
               data-gallery-panel={panel.key}
               role="tabpanel"
             >
               {columns.map((columnImages) => (
                 <div class="column">
-                  {columnImages.map(({ url: image, width, height }, index) => {
+                  {columnImages.map(({ url: image, width, height, isVideo }, index) => {
                     const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
                     const isFirst = panelIndex === 0 && index === 0
+                    if (isVideo) {
+                      return (
+                        <div class="media-wrap video-wrap">
+                          <video
+                            src={image}
+                            width={width}
+                            height={height}
+                            controls
+                            preload="metadata"
+                            class="gallery-video"
+                            aria-label={`Video ${index} - ${slug.split(',')[0]}`}
+                          />
+                        </div>
+                      )
+                    }
                     return (
                       <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
                         <span class="img-placeholder">
@@ -113,13 +138,20 @@ function renderGalleryColumns(imgs) {
         })}
       </>
     ) : (
-      <div id="my-gallery" class="row p-8">
+      <div id="my-gallery" class={`row p-8 ${imagesWithGroup.length === 1 ? 'gallery-single' : ''}`}>
         {new Array(3).fill(0).map((_, columnIndex) => (
           <div class="column">
             {imagesWithGroup
               .slice(Math.floor(imagesWithGroup.length / 3) * columnIndex, Math.floor(imagesWithGroup.length / 3) * (columnIndex + 1))
-              .map(({ url: image, width, height }, index) => {
+              .map(({ url: image, width, height, isVideo }, index) => {
                 const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
+                if (isVideo) {
+                  return (
+                    <div class="media-wrap video-wrap">
+                      <video src={image} width={width} height={height} controls preload="metadata" class="gallery-video" aria-label={`Video ${index} - ${slug.split(',')[0]}`} />
+                    </div>
+                  )
+                }
                 return (
                   <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
                     <span class="img-placeholder">
@@ -196,6 +228,28 @@ function renderGalleryColumns(imgs) {
   }
   .gallery-panel.gallery-panel-hidden {
     display: none !important;
+  }
+  .gallery-panel-single.row,
+  #my-gallery.gallery-single.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .gallery-panel-single .column,
+  #my-gallery.gallery-single .column {
+    max-width: 800px;
+    flex: 0 1 auto;
+  }
+  .media-wrap.video-wrap {
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+  .gallery-video {
+    width: 100%;
+    height: auto;
+    display: block;
+    vertical-align: middle;
   }
 </style>
 
