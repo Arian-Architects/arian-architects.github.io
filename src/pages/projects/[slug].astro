@@ -101,33 +101,17 @@ function renderGalleryColumns(imgs) {
                     const isFirst = panelIndex === 0 && index === 0
                     if (isVideo) {
                       return (
-                        <div class="media-wrap video-wrap">
-                          <video
-                            src={image}
-                            width={width}
-                            height={height}
-                            controls
-                            preload="metadata"
-                            class="gallery-video"
-                            aria-label={`Video ${index} - ${slug.split(',')[0]}`}
-                          />
+                        <div class="media-wrap video-wrap lazy-media" data-src={image} data-width={width} data-height={height}>
+                          <video width={width} height={height} controls preload="none" class="gallery-video" aria-label={`Video ${index} - ${slug.split(',')[0]}`} />
                         </div>
                       )
                     }
                     return (
-                      <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
+                      <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap lazy-media" data-src={image} data-thumb={thumbUrl}>
                         <span class="img-placeholder">
-                          <img src={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" fetchpriority={isFirst ? 'high' : 'auto'} />
+                          <img data-thumb={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" loading="lazy" class="img-placeholder-img" />
                         </span>
-                        <img
-                          src={image}
-                          width={width}
-                          height={height}
-                          decoding="async"
-                          class="img-full"
-                          loading={isFirst ? 'eager' : 'lazy'}
-                          alt={`Image ${index} - ${slug.split(',')[0]}`}
-                        />
+                        <img data-src={image} width={width} height={height} decoding="async" class="img-full" alt={`Image ${index} - ${slug.split(',')[0]}`} />
                       </a>
                     )
                   })}
@@ -147,25 +131,17 @@ function renderGalleryColumns(imgs) {
                 const thumbUrl = `${image}?tr=bl-20,w-200,h-200`
                 if (isVideo) {
                   return (
-                    <div class="media-wrap video-wrap">
-                      <video src={image} width={width} height={height} controls preload="metadata" class="gallery-video" aria-label={`Video ${index} - ${slug.split(',')[0]}`} />
+                    <div class="media-wrap video-wrap lazy-media" data-src={image} data-width={width} data-height={height}>
+                      <video width={width} height={height} controls preload="none" class="gallery-video" aria-label={`Video ${index} - ${slug.split(',')[0]}`} />
                     </div>
                   )
                 }
                 return (
-                  <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap">
+                  <a href={image} data-pswp-width={width} data-pswp-height={height} class="img-wrap lazy-media" data-src={image} data-thumb={thumbUrl}>
                     <span class="img-placeholder">
-                      <img src={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" fetchpriority={index === 0 ? 'high' : 'auto'} />
+                      <img data-thumb={thumbUrl} width={width} height={height} alt="" aria-hidden="true" decoding="async" loading="lazy" class="img-placeholder-img" />
                     </span>
-                    <img
-                      src={image}
-                      width={width}
-                      height={height}
-                      decoding="async"
-                      class="img-full"
-                      loading={index === 0 ? 'eager' : 'lazy'}
-                      alt={`Image ${index} - ${slug.split(',')[0]}`}
-                    />
+                    <img data-src={image} width={width} height={height} decoding="async" class="img-full" alt={`Image ${index} - ${slug.split(',')[0]}`} />
                   </a>
                 )
               })}
@@ -189,11 +165,19 @@ function renderGalleryColumns(imgs) {
     width: 100%;
     height: 100%;
   }
+  .img-placeholder,
   .img-placeholder img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+  .img-placeholder {
+    background: #e5e7eb;
+  }
+  .media-wrap.video-wrap:not(.lazy-loaded) {
+    background: #e5e7eb;
+    min-height: 200px;
   }
   .img-full {
     position: relative;
@@ -258,58 +242,123 @@ function renderGalleryColumns(imgs) {
   import pswpModule from 'photoswipe'
   import PhotoSwipeLightbox from 'photoswipe/lightbox'
 
+  const LAZY_ROOT_MARGIN = '200px 0px 400px 0px'
+
+  function setupLazyMedia() {
+    const lazyEls = document.querySelectorAll('.lazy-media:not(.lazy-loaded)')
+    if (lazyEls.length === 0) return
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          const wrap = entry.target as HTMLElement
+          if (wrap.classList.contains('lazy-loaded')) return
+          wrap.classList.add('lazy-loaded')
+
+          if (wrap.classList.contains('img-wrap')) {
+            const thumb = wrap.querySelector<HTMLImageElement>('.img-placeholder-img')
+            const full = wrap.querySelector<HTMLImageElement>('.img-full')
+            const thumbSrc = wrap.dataset.thumb
+            const fullSrc = wrap.dataset.src
+            if (thumb && thumbSrc) {
+              thumb.src = thumbSrc
+            }
+            if (full && fullSrc) {
+              full.src = fullSrc
+            }
+          } else if (wrap.classList.contains('video-wrap')) {
+            const video = wrap.querySelector<HTMLVideoElement>('video')
+            const src = wrap.dataset.src
+            if (video && src) {
+              video.src = src
+              video.load()
+            }
+          }
+        })
+      },
+      { rootMargin: LAZY_ROOT_MARGIN, threshold: 0.01 },
+    )
+    lazyEls.forEach((el) => io.observe(el))
+  }
+
+  function setupImgLoaded() {
+    document.querySelectorAll('.img-full').forEach((el) => {
+      const img = el as HTMLImageElement
+      const removePlaceholder = () => {
+        img.classList.add('is-loaded')
+        const placeholder = img.parentElement?.querySelector('.img-placeholder')
+        if (placeholder) placeholder.remove()
+      }
+      if (img.src && img.complete) removePlaceholder()
+      else img.addEventListener('load', removePlaceholder)
+    })
+  }
+
+  function initPhotoSwipe() {
+    const panels = document.querySelectorAll('.gallery-panel')
+    if (panels.length > 0) {
+      panels.forEach((panel) => {
+        const id = panel.id
+        if (!id) return
+        new PhotoSwipeLightbox({
+          pswpModule,
+          children: 'a',
+          gallery: `#${id}`,
+        }).init()
+      })
+    } else {
+      const gallery = document.getElementById('my-gallery')
+      if (gallery) {
+        new PhotoSwipeLightbox({
+          pswpModule,
+          children: 'a',
+          gallery: '#my-gallery',
+        }).init()
+      }
+    }
+  }
+
   document.addEventListener(
     'astro:page-load',
     () => {
-      const panels = document.querySelectorAll('.gallery-panel')
-      if (panels.length > 0) {
-        panels.forEach((panel) => {
-          const id = panel.id
-          if (!id) return ``
-          new PhotoSwipeLightbox({
-            pswpModule,
-            children: 'a',
-            gallery: `#${id}`,
-          }).init()
-        })
+      setupLazyMedia()
+      setupImgLoaded()
+
+      const galleryRoot = document.getElementById('my-gallery') ?? document.querySelector('.gallery-panel:not(.gallery-panel-hidden)')
+      let lightboxInited = false
+      if (galleryRoot) {
+        const galleryIo = new IntersectionObserver(
+          (entries) => {
+            if (lightboxInited) return
+            if (!entries[0]?.isIntersecting) return
+            lightboxInited = true
+            initPhotoSwipe()
+          },
+          { rootMargin: '100px', threshold: 0 },
+        )
+        galleryIo.observe(galleryRoot)
       } else {
-        const gallery = document.getElementById('my-gallery')
-        if (gallery) {
-          new PhotoSwipeLightbox({
-            pswpModule,
-            children: 'a',
-            gallery: '#my-gallery',
-          }).init()
-        }
+        initPhotoSwipe()
       }
 
-      document.querySelectorAll('.img-full').forEach((el) => {
-        const img = el as HTMLImageElement
-        const removePlaceholder = () => {
-          img.classList.add('is-loaded')
-          const placeholder = img.parentElement?.querySelector('.img-placeholder')
-          if (placeholder) placeholder.remove()
-        }
-        if (img.complete) removePlaceholder()
-        else img.addEventListener('load', removePlaceholder)
-      })
-
       const filtersEl = document.getElementById('gallery-filters')
-      if (!filtersEl) return
-      const panelEls = document.querySelectorAll('.gallery-panel')
-
-      filtersEl.querySelectorAll('.gallery-filter-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const filter = (btn as HTMLButtonElement).dataset.galleryFilter
-          if (!filter) return
-          filtersEl.querySelectorAll('.gallery-filter-btn').forEach((b) => b.classList.remove('is-active'))
-          btn.classList.add('is-active')
-          panelEls.forEach((el) => {
-            if (el.getAttribute('data-gallery-panel') === filter) el.classList.remove('gallery-panel-hidden')
-            else el.classList.add('gallery-panel-hidden')
+      if (filtersEl) {
+        const panelEls = document.querySelectorAll('.gallery-panel')
+        filtersEl.querySelectorAll('.gallery-filter-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const filter = (btn as HTMLButtonElement).dataset.galleryFilter
+            if (!filter) return
+            filtersEl.querySelectorAll('.gallery-filter-btn').forEach((b) => b.classList.remove('is-active'))
+            btn.classList.add('is-active')
+            panelEls.forEach((el) => {
+              if (el.getAttribute('data-gallery-panel') === filter) el.classList.remove('gallery-panel-hidden')
+              else el.classList.add('gallery-panel-hidden')
+            })
+            setupLazyMedia()
           })
         })
-      })
+      }
     },
     { once: false },
   )
